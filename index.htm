@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,17 +28,21 @@
         }
 
         .menu button {
+            display: flex;
+            justify-content: center;
             color: white;
             background: none;
             border: none;
-            padding: 10px 300px;
-            font-size: 16px;
+            padding: 10px 60px;
+            font-size: 100%;
+            width: 90%;
             cursor: pointer;
             transition: background 0.3s;
         }
 
         .menu button:hover {
             background-color: #555;
+            font-weight: bold;
         }
 
         .box-container {
@@ -86,10 +91,11 @@
         .questions button {
             background-color: #eee;
             border: 1px solid #ccc;
-            padding: 10px;
+            padding: 20px;
             cursor: pointer;
             transition: background 0.3s;
-            width: 90%;
+            width: 100%;
+            font-size: 100%;
             max-width: 600px;
         }
 
@@ -105,11 +111,12 @@
             margin-top: 20px;
             padding: 10px 20px;
             background-color: #333;
-            color: white;
+            color: rgb(15, 13, 13);
             border: none;
             cursor: pointer;
             font-size: 36px;
             transition: background 0.3s;
+            font-weight: bold;
         }
 
         .back-button:hover {
@@ -130,6 +137,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="menu">
         <button data-category="casa">Casa</button>
@@ -138,9 +146,9 @@
     </div>
 
     <div class="box-container" id="home">
-        <div class="box" data-category="casa"><img src="1.png" alt="Casa"></div>
-        <div class="box" data-category="construccion"><img src="2.png" alt="Construcción"></div>
-        <div class="box" data-category="escuela"><img src="3.png" alt="Escuela"></div>
+        <div class="box" data-category="casa"><img src="IMAGEN\1.png" alt="Casa"></div>
+        <div class="box" data-category="construccion"><img src="IMAGEN\2.png" alt="Construcción"></div>
+        <div class="box" data-category="escuela"><img src="IMAGEN\3.png" alt="Escuela"></div>
     </div>
 
     <div class="questions" id="questions">
@@ -162,19 +170,19 @@
 
         const questions = {
             casa: [
-                { question: '¿Cuál es tu habitación favorita?', video: 'https://www.jw.org/es/biblioteca/videos/#es/mediaitems/VODIntExpBlessings/pub-jwb_201905_11_VIDEO' },
-                { question: '¿Qué mejoras harías en tu casa?', video: '.mp4' },
-                { question: '¿Prefieres un estilo moderno o clásico?', video: 'https://www.youtube.com/embed/VIDEO_ID_CASA_3' }
+                { question: '¿Como es servir en betel?', video: 'VIDEO\\1.mp4' },
+                { question: '¿Qué te gusta mas de tu asignacion?', video: 'VIDEO\\1.mp4' },
+                { question: '¿como te ha ayudado jehova en tu trabajo?', video: 'VIDEO\\1.mp4' }
             ],
             construccion: [
-                { question: '¿Qué tipo de edificio te interesa construir?', video: 'https://www.youtube.com/embed/VIDEO_ID_CONSTRUCCION_1' },
-                { question: '¿Qué materiales prefieres usar?', video: 'https://www.youtube.com/embed/VIDEO_ID_CONSTRUCCION_2' },
-                { question: '¿Cuál es tu presupuesto?', video: 'https://www.youtube.com/embed/VIDEO_ID_CONSTRUCCION_3' }
+                { question: '¿Qué tipo de edificio te interesa construir?', video: 'VIDEO\\2.mp4' },
+                { question: '¿Qué materiales prefieres usar?', video: 'VIDEO\\2.mp4' },
+                { question: '¿Cuál es tu presupuesto?', video: 'VIDEO\\2.mp4' }
             ],
             escuela: [
-                { question: '¿Cuál es tu materia favorita?', video: 'https://www.youtube.com/embed/VIDEO_ID_ESCUELA_1' },
-                { question: '¿Qué mejorarías en tu escuela?', video: 'https://www.youtube.com/embed/VIDEO_ID_ESCUELA_2' },
-                { question: '¿Prefieres clases presenciales o virtuales?', video: 'https://www.youtube.com/embed/VIDEO_ID_ESCUELA_3' }
+                { question: '¿Cuál es tu materia favorita?', video: 'VIDEO\\3.mp4' },
+                { question: '¿Qué mejorarías en tu escuela?', video: 'VIDEO\\3.mp4' },
+                { question: '¿Prefieres clases presenciales o virtuales?', video: 'VIDEO\\3.mp4' }
             ]
         };
 
@@ -229,4 +237,5 @@
         }
     </script>
 </body>
+
 </html>
