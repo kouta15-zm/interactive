@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Menu</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            background-color: #333;
+            padding: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .menu button {
+            color: white;
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .menu button:hover {
+            background-color: #555;
+        }
+
+        .box-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            margin: 70px 0;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .box {
+            flex: 1;
+            max-width: calc(33.33% - 50px);
+            aspect-ratio: 16/9;
+            background: #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid #ccc;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .box:hover {
+            transform: scale(1.05);
+        }
+
+        .questions {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .questions button {
+            background-color: #eee;
+            border: 1px solid #ccc;
+            padding: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .questions button:hover {
+            background-color: #ddd;
+        }
+
+        .highlight {
+            background-color: #ff0 !important;
+        }
+
+        .back-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 36px;
+            transition: background 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #555;
+        }
+
+        .video-container {
+            display: none;
+            margin-top: 20px;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 450px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu">
+        <button data-category="casa">Casa</button>
+        <button data-category="construccion">Construcción</button>
+        <button data-category="escuela">Escuela</button>
+    </div>
+
+    <div class="box-container" id="home">
+        <div class="box" data-category="casa"><img src="src/1.png" alt="Casa"></div>
+        <div class="box" data-category="construccion"><img src="src/2.png" alt="Construcción"></div>
+        <div class="box" data-category="escuela"><img src="src/3.png" alt="Escuela"></div>
+    </div>
+
+    <div class="questions" id="questions">
+        <!-- Questions will populate here -->
+        <button class="back-button" onclick="goBackToMenu()">Volver al Menú Principal</button>
+    </div>
+
+    <!-- Video Container -->
+    <div class="video-container" id="video-container">
+        <iframe id="video-frame" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+
+    <script>
+        const boxes = document.querySelectorAll('.box');
+        const home = document.getElementById('home');
+        const questionsDiv = document.getElementById('questions');
+        const videoContainer = document.getElementById('video-container');
+        const videoFrame = document.getElementById('video-frame');
+
+        const questions = {
+            casa: [
+                { question: '¿Cuál es tu habitación favorita?', video: 'https://www.jw.org/es/biblioteca/videos/#es/mediaitems/VODIntExpBlessings/pub-jwb_201905_11_VIDEO' },
+                { question: '¿Qué mejoras harías en tu casa?', video: 'src\2.mp4' },
+                { question: '¿Prefieres un estilo moderno o clásico?', video: 'https://www.youtube.com/embed/VIDEO_ID_CASA_3' }
+            ],
+            construccion: [
+                { question: '¿Qué tipo de edificio te interesa construir?', video: 'https://www.youtube.com/embed/VIDEO_ID_CONSTRUCCION_1' },
+                { question: '¿Qué materiales prefieres usar?', video: 'https://www.youtube.com/embed/VIDEO_ID_CONSTRUCCION_2' },
+                { question: '¿Cuál es tu presupuesto?', video: 'https://www.youtube.com/embed/VIDEO_ID_CONSTRUCCION_3' }
+            ],
+            escuela: [
+                { question: '¿Cuál es tu materia favorita?', video: 'https://www.youtube.com/embed/VIDEO_ID_ESCUELA_1' },
+                { question: '¿Qué mejorarías en tu escuela?', video: 'https://www.youtube.com/embed/VIDEO_ID_ESCUELA_2' },
+                { question: '¿Prefieres clases presenciales o virtuales?', video: 'https://www.youtube.com/embed/VIDEO_ID_ESCUELA_3' }
+            ]
+        };
+
+        boxes.forEach(box => {
+            box.addEventListener('click', () => {
+                const category = box.dataset.category;
+                showQuestions(category);
+            });
+        });
+
+        function showQuestions(category) {
+            home.style.display = 'none';
+            questionsDiv.style.display = 'flex';
+
+            questionsDiv.innerHTML = questions[category].map(q => `
+                <button class="question" data-video="${q.video}">${q.question}</button>
+            `).join('');
+
+            questionsDiv.innerHTML += '<button class="back-button" onclick="goBackToMenu()">Volver al Menú Principal</button>';
+
+            document.querySelectorAll('.question').forEach(question => {
+                question.addEventListener('click', () => {
+                    question.classList.toggle('highlight');
+                    showVideo(question.dataset.video);
+                });
+            });
+        }
+
+        function goBackToMenu() {
+            questionsDiv.style.display = 'none';
+            home.style.display = 'flex';
+            videoContainer.style.display = 'none';
+            videoFrame.src = '';
+        }
+
+        function showVideo(videoUrl) {
+            videoContainer.style.display = 'block';
+            videoFrame.src = videoUrl;
+            enterFullScreen(videoContainer);
+        }
+
+        function enterFullScreen(element) {
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.mozRequestFullScreen) { // Firefox
+                element.mozRequestFullScreen();
+            } else if (element.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                element.webkitRequestFullscreen();
+            } else if (element.msRequestFullscreen) { // IE/Edge
+                element.msRequestFullscreen();
+            }
+        }
+    </script>
+</body>
+</html>
