@@ -57,13 +57,7 @@ function goBackToMenu() {
 function showVideo(videoUrl) {
     videoContainer.style.display = 'block';
     videoFrame.src = `${videoUrl}?controls=0`; // Add controls=0 to hide controls
-    enterFullScreen(videoContainer);
-}
-
-function exitVideo() {
-    videoContainer.style.display = 'none';
-    videoFrame.src = ''; // Stop the video
-    questionsDiv.style.display = 'flex';
+    enterFullScreen(videoFrame); // Request full screen for the iframe
 }
 
 function enterFullScreen(element) {
@@ -76,4 +70,9 @@ function enterFullScreen(element) {
     } else if (element.msRequestFullscreen) { // IE/Edge
         element.msRequestFullscreen();
     }
+}
+function exitVideo() {
+    videoContainer.style.display = 'none';
+    videoFrame.src = ''; // Stop the video
+    questionsDiv.style.display = 'flex';
 }
