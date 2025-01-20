@@ -57,7 +57,16 @@ function goBackToMenu() {
 function showVideo(videoUrl) {
     videoContainer.style.display = 'block';
     videoFrame.src = `${videoUrl}?controls=0`; // Add controls=0 to hide controls
-    enterFullScreen(videoFrame); // Request full screen for the iframe
+    enterFullScreen(videoContainer); // Request full screen for the video container
+}
+
+function exitVideo() {
+    if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
+        exitFullScreen();
+    }
+    videoContainer.style.display = 'none';
+    videoFrame.src = ''; // Stop the video
+    questionsDiv.style.display = 'flex';
 }
 
 function enterFullScreen(element) {
@@ -71,8 +80,15 @@ function enterFullScreen(element) {
         element.msRequestFullscreen();
     }
 }
-function exitVideo() {
-    videoContainer.style.display = 'none';
-    videoFrame.src = ''; // Stop the video
-    questionsDiv.style.display = 'flex';
+
+function exitFullScreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.mozCancelFullScreen) { // Firefox
+        document.mozCancelFullScreen();
+    } else if (document.webkitExitFullscreen) { // Chrome, Safari, Opera
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { // IE/Edge
+        document.msExitFullscreen();
+    }
 }
