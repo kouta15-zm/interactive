@@ -1,0 +1,145 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.menu {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    background-color: #333;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.menu button {
+    color: white;
+    background: none;
+    border: none;
+    padding: 10px 300px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.menu button:hover {
+    background-color: #555;
+}
+
+.box-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin: 50px 0;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.box {
+    position: relative;
+    flex: 1;
+    max-width: calc(33.33% - 50px);
+    height: 80vh; /* Adjust the height as needed */
+    background: #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #ccc;
+    transition: transform 0.3s;
+    cursor: pointer;
+}
+
+.box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.box:hover {
+    transform: scale(1.05);
+}
+
+.questions {
+    display: none;
+    flex-direction: column;
+    gap: 20px; /* Increase gap between questions */
+    margin-top: 20px;
+    align-items: center;
+    width: 100%;
+}
+
+.questions button {
+    background-color: #eee;
+    border: 1px solid #ccc;
+    padding: 20px; /* Increase padding for larger buttons */
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 90%;
+    max-width: 800px; /* Increase max-width for larger buttons */
+    font-size: 20px; /* Increase font size */
+    text-align: left; /* Align text to the left */
+    margin: 0 auto; /* Center the buttons */
+}
+
+.questions button:hover {
+    background-color: #ddd;
+}
+
+.highlight {
+    background-color: #ff0 !important;
+}
+
+.back-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 36px;
+    transition: background 0.3s;
+}
+
+.back-button:hover {
+    background-color: #555;
+}
+
+.video-container {
+    display: none;
+    margin-top: 20px;
+    width: 80%;
+    max-width: 800px;
+    position: relative;
+}
+
+iframe {
+    width: 100%;
+    height: 450px;
+    border: none;
+}
+
+.exit-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.exit-button:hover {
+    background-color: #555;
+}
