@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Responsive Menu</title>
     <style>
+
         body {
             margin: 0;
             font-family: Arial, sans-serif;
@@ -16,69 +17,90 @@
             height: 100vh;
             background-color: #f4f4f4;
         }
+        
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* Tres columnas, una para cada imagen */
+            width: 100%;
+            position: fixed; /* Posición fija */
+            top: 0; /* Fijado en la parte superior */
+            z-index: 1000; /* Asegura que el menú esté por encima de otros elementos */
+        }
 
         .menu {
             display: flex;
             justify-content: center;
-            gap: 20px;
-            background-color: #333;
+            align-items: center;
+            background-color: rgba(51, 51, 51, 0.8); /* Fondo semitransparente */
             padding: 10px;
-            width: 100%;
             box-sizing: border-box;
         }
-
+        
         .menu button {
-            display: flex;
-            justify-content: center;
             color: white;
             background: none;
             border: none;
-            padding: 10px 60px;
+            padding: 10px 20px;
             font-size: 100%;
-            width: 90%;
             cursor: pointer;
-            transition: background 0.3s;
         }
-
+        
         .menu button:hover {
             background-color: #555;
             font-weight: bold;
         }
-
+        
         .box-container {
             display: flex;
             flex-direction: row;
             justify-content: center;
             align-items: center;
-            gap: 50px;
-            margin: 70px 0;
+            gap: 20px;
             width: 100%;
-            flex-wrap: wrap;
+            height: calc(100vh - 10px); /* Ocupa toda la altura de la pantalla menos 10 píxeles */
+            margin-top: 10px; /* Añade un margen superior de 10 píxeles */
         }
-
+        
         .box {
             flex: 1;
-            max-width: calc(33.33% - 50px);
-            aspect-ratio: 16/9;
-            background: #ddd;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 2px solid #ccc;
-            transition: transform 0.3s;
-            cursor: pointer;
+            max-width: 30%; /* Ajusta el ancho máximo de cada caja */
+            height: 100%; /* Ocupa toda la altura del contenedor */
+            position: relative;
+            cursor: pointer; /* Añade un cursor de puntero para indicar que es clicable */
         }
-
+        
         .box img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: transform 1s ease; /* Ajusta la duración de la transición a 1 segundo */
         }
-
-        .box:hover {
+        
+        .box:hover img {
             transform: scale(1.05);
         }
-
+    
+        .box button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            background: rgba(51, 51, 51, 0.8); /* Fondo semitransparente */
+            border: none;
+            padding: 10px 20px;
+            font-size: 100%;
+            cursor: pointer;
+        }
+        
+        .box button:hover {
+            background-color: #555;
+            font-weight: bold;
+        }
+        
         .questions {
             display: none;
             flex-direction: column;
@@ -139,16 +161,28 @@
 </head>
 
 <body>
-    <div class="menu">
-        <button data-category="casa">Casa</button>
-        <button data-category="construccion">Construcción</button>
-        <button data-category="escuela">Escuela</button>
+    <div class="menu-container">
+        <div class="menu">
+            <button data-category="casa" onclick="showQuestions('casa')">Casa</button>
+        </div>
+        <div class="menu">
+            <button data-category="construccion" onclick="showQuestions('construccion')">Construcción</button>
+        </div>
+        <div class="menu">
+            <button data-category="escuela" onclick="showQuestions('escuela')">Escuela</button>
+        </div>
     </div>
 
     <div class="box-container" id="home">
-        <div class="box" data-category="casa"><img src="IMAGEN\1.png" alt="Casa"></div>
-        <div class="box" data-category="construccion"><img src="IMAGEN\2.png" alt="Construcción"></div>
-        <div class="box" data-category="escuela"><img src="IMAGEN\3.png" alt="Escuela"></div>
+        <div class="box" data-category="casa" onclick="showQuestions('casa')">
+            <img src="IMAGEN\1.png" alt="Casa">
+        </div>
+        <div class="box" data-category="construccion" onclick="showQuestions('construccion')">
+            <img src="IMAGEN\2.png" alt="Construcción">
+        </div>
+        <div class="box" data-category="escuela" onclick="showQuestions('escuela')">
+            <img src="IMAGEN\3.png" alt="Escuela">
+        </div>
     </div>
 
     <div class="questions" id="questions">
@@ -162,7 +196,6 @@
     </div>
 
     <script>
-        const boxes = document.querySelectorAll('.box');
         const home = document.getElementById('home');
         const questionsDiv = document.getElementById('questions');
         const videoContainer = document.getElementById('video-container');
@@ -185,13 +218,6 @@
                 { question: '¿Prefieres clases presenciales o virtuales?', video: 'VIDEO\\3.mp4' }
             ]
         };
-
-        boxes.forEach(box => {
-            box.addEventListener('click', () => {
-                const category = box.dataset.category;
-                showQuestions(category);
-            });
-        });
 
         function showQuestions(category) {
             home.style.display = 'none';
@@ -221,19 +247,6 @@
         function showVideo(videoUrl) {
             videoContainer.style.display = 'block';
             videoFrame.src = videoUrl;
-            enterFullScreen(videoContainer);
-        }
-
-        function enterFullScreen(element) {
-            if (element.requestFullscreen) {
-                element.requestFullscreen();
-            } else if (element.mozRequestFullScreen) { // Firefox
-                element.mozRequestFullScreen();
-            } else if (element.webkitRequestFullscreen) { // Chrome, Safari, Opera
-                element.webkitRequestFullscreen();
-            } else if (element.msRequestFullscreen) { // IE/Edge
-                element.msRequestFullscreen();
-            }
         }
     </script>
 </body>
