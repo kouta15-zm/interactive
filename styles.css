@@ -1,4 +1,5 @@
-body {
+body, html {
+    height: 100%;
     margin: 0;
     padding: 0;
 }
@@ -81,12 +82,31 @@ body {
 }
 
 .questions {
-    display: none;
-    flex-direction: column;
-    gap: 20px; /* Increase gap between questions */
-    margin-top: 20px;
-    align-items: center;
-    width: 100%;
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.questions h2 {
+    margin-bottom: 20px;
+}
+
+.questions ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: left;
+}
+
+.questions li {
+    background-color: #f9f9f9;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .questions button {
@@ -221,7 +241,7 @@ body {
     color: white;
     border: none;
     cursor: pointer;
-    font-size: 36px;
+    font-size: 16px;
     transition: background 0.3s;
 }
 

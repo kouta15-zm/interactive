@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,24 +8,42 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="menu">
-        <button data-category="casa" onclick="showQuestions('casa')">Casa</button>
-        <button data-category="construccion" onclick="showQuestions('construccion')">Construcción</button>
-        <button data-category="escuela" onclick="showQuestions('escuela')">Escuela</button>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="imagebox">
+                    <a href="javascript:void(0);" onclick="showQuestions('casa')">
+                        <img src="src/IMAGEN/1.png" class="category-banner img-fluid">
+                        <span class="imagebox-desc">Casa</span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="imagebox">
+                    <a href="javascript:void(0);" onclick="showQuestions('construccion')">
+                        <img src="src/IMAGEN/2.png" class="category-banner img-fluid">
+                        <span class="imagebox-desc">Construcción</span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="imagebox">
+                    <a href="javascript:void(0);" onclick="showQuestions('escuela')">
+                        <img src="src/IMAGEN/3.png" class="category-banner img-fluid">
+                        <span class="imagebox-desc">Escuela</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="box-container" id="home">
-        <div class="box" data-category="casa"><img src="src/IMAGEN/1.png" alt="Casa"></div>
-        <div class="box" data-category="construccion"><img src="src/IMAGEN/2.png" alt="Construcción"></div>
-        <div class="box" data-category="escuela"><img src="src/IMAGEN/3.png" alt="Escuela"></div>
-    </div>
-    <div class="questions" id="questions">
+    <div class="questions" id="questions" style="display: none;">
         <!-- Questions will populate here -->
         <button class="back-button" onclick="goBackToMenu()">Volver al Menú Principal</button>
     </div>
 
     <!-- Video Container -->
-    <div class="video-container" id="video-container">
+    <div class="video-container" id="video-container" style="display: none;">
         <iframe id="video-frame" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
         <button class="exit-button" onclick="exitVideo()">Salir del Video</button>
     </div>
