@@ -1,5 +1,9 @@
 body {
     margin: 0;
+    padding: 0;
+}
+
+body {
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
@@ -7,6 +11,14 @@ body {
     justify-content: center;
     height: 100vh;
     background-color: #f4f4f4;
+}
+
+.container-fluid {
+    height: calc(100% - 20px);
+    margin: 10px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
 }
 
 .menu {
@@ -88,6 +100,109 @@ body {
     font-size: 20px; /* Increase font size */
     text-align:left; /* Align text to the left */
     margin: 0 auto; /* Center the buttons */
+}body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+    font-size: 18px; /* Aumenta el tamaño de la fuente en general */
+}
+
+.container-fluid {
+    height: calc(100% - 20px);
+    margin: 10px;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.imagebox {
+    background: black;
+    padding: 0px;
+    position: relative;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+}
+
+.imagebox img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    opacity: 1;
+    transition: 0.5s opacity;
+}
+
+.imagebox .imagebox-desc {
+    background-color: rgba(0, 0, 0, 0.6);
+    bottom: 0px;
+    color: white;
+    font-size: 1.8em; /* Tamaño de letra más grande */
+    font-weight: bold; /* Negrita */
+    text-transform: uppercase; /* Mayúsculas */
+    left: 0px;
+    padding: 10px 15px;
+    position: absolute;
+    transition: 0.5s padding;
+    text-align: center;
+    width: 100%;
+}
+
+.imagebox:hover img {
+    opacity: 0.7;
+}
+
+.imagebox:hover .imagebox-desc {
+    padding-bottom: 10%;
+}
+
+.questions {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-size: 1.2em; /* Aumenta el tamaño de la fuente para las preguntas */
+}
+
+.questions h2 {
+    margin-bottom: 20px;
+}
+
+.questions ul {
+    list-style-type: none;
+    padding: 0;
+    text-align: left;
+}
+
+.questions li {
+    background-color: #f9f9f9;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    font-size: 1.2em; /* Aumenta el tamaño de la fuente para los elementos de la lista */
+}
+
+.back-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 18px; /* Aumenta el tamaño de la fuente del botón */
+    transition: background 0.3s;
+}
+
+.back-button:hover {
+    background-color: #555;
 }
 
 .questions button:hover {
@@ -99,10 +214,11 @@ body {
 }
 
 .back-button {
-    margin-top: 20px;
+    display: block;
+    margin: 20px auto;
     padding: 10px 20px;
     background-color: #333;
-    color: rgb(0, 0, 0);
+    color: white;
     border: none;
     cursor: pointer;
     font-size: 36px;
@@ -148,4 +264,42 @@ iframe {
 
 .exit-button:hover {
     background-color: #555;
+}
+
+.imagebox {
+    background: black;
+    padding: 0px;
+    position: relative;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+}
+
+.imagebox img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    opacity: 1;
+    transition: 0.5s opacity;
+}
+
+.imagebox .imagebox-desc {
+    background-color: rgba(0, 0, 0, 0.6);
+    bottom: 0px;
+    color: white;
+    font-size: 1.2em;
+    left: 0px;
+    padding: 10px 15px;
+    position: absolute;
+    transition: 0.5s padding;
+    text-align: center;
+    width: 100%;
+}
+
+.imagebox:hover img {
+    opacity: 0.7;
+}
+
+.imagebox:hover .imagebox-desc {
+    padding-bottom: 10%;
 }

@@ -30,9 +30,9 @@ boxes.forEach(box => {
 });
 
 function showQuestions(category) {
-    home.style.display = 'none';
-    questionsDiv.style.display = 'flex';
-
+    // Ocultar el contenedor de imágenes
+    document.querySelector('.container-fluid').style.display = 'none';
+    
     questionsDiv.innerHTML = questions[category].map(q => `
         <button class="question" data-video="${q.video}">${q.question}</button>
     `).join('');
