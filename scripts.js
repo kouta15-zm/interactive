@@ -33,25 +33,46 @@ function showQuestions(category) {
     // Ocultar el contenedor de imágenes
     document.querySelector('.container-fluid').style.display = 'none';
     
-    questionsDiv.innerHTML = questions[category].map(q => `
-        <button class="question" data-video="${q.video}">${q.question}</button>
-    `).join('');
+    // Mostrar el contenedor de preguntas
+    const questionsContainer = document.getElementById('questions');
+    questionsContainer.style.display = 'block';
+    
+    // Aquí puedes agregar lógica para cargar las preguntas correspondientes a la categoría
+    const questions = {
+        casa: [
+            "¿Cuál es tu habitación favorita?",
+            "¿Cuántas personas viven en tu casa?",
+            "¿Tienes jardín en tu casa?"
+        ],
+        construccion: [
+            "¿Qué materiales se usan en la construcción?",
+            "¿Cuál es el edificio más alto que conoces?",
+            "¿Qué herramientas se necesitan para construir una casa?"
+        ],
+        escuela: [
+            "¿Cuál es tu asignatura favorita?",
+            "¿Cuántos estudiantes hay en tu clase?",
+            "¿Qué actividades extracurriculares te gustan?"
+        ]
+    };
 
-    questionsDiv.innerHTML += '<button class="back-button" onclick="goBackToMenu()">Volver al Menú Principal</button>';
+    const selectedQuestions = questions[category] || [];
+    const questionsList = selectedQuestions.map(question => `<li>${question}</li>`).join('');
 
-    document.querySelectorAll('.question').forEach(question => {
-        question.addEventListener('click', () => {
-            question.classList.toggle('highlight');
-            showVideo(question.dataset.video);
-        });
-    });
+    questionsContainer.innerHTML = `
+        <h2>Preguntas sobre ${category}</h2>
+        <ul>${questionsList}</ul>
+        <button class="back-button" onclick="goBackToMenu()">Volver al Menú Principal</button>
+    `;
 }
 
 function goBackToMenu() {
-    questionsDiv.style.display = 'none';
-    home.style.display = 'flex';
-    videoContainer.style.display = 'none';
-    videoFrame.src = ''; // Stop the video
+    // Mostrar el contenedor de imágenes
+    document.querySelector('.container-fluid').style.display = 'flex';
+    
+    // Ocultar el contenedor de preguntas
+    const questionsContainer = document.getElementById('questions');
+    questionsContainer.style.display = 'none';
 }
 
 function showVideo(videoUrl) {
