@@ -6,6 +6,7 @@
     <title>Responsive Menu</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
     <div class="container-fluid">
@@ -39,12 +40,19 @@
 
     <div class="questions" id="questions" style="display: none;">
         <!-- Questions will populate here -->
+        <div class="question-buttons">
+            <button class="icon-button" onclick="goBackToMenu()"><i class="fas fa-home"></i></button>
+            <button class="icon-button" onclick="showQuestions('casa')"><i class="fas fa-home"></i></button>
+            <button class="icon-button" onclick="showQuestions('construccion')"><i class="fas fa-building"></i></button>
+            <button class="icon-button" onclick="showQuestions('escuela')"><i class="fas fa-school"></i></button>
+        </div>
     </div>
 
     <!-- Video Container -->
     <div class="video-container" id="video-container" style="display: none;">
         <iframe id="video-frame" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-        <button class="exit-button" onclick="exitVideo()">Salir del Video</button>
+        <button class="icon-button" onclick="goBackToMenu()"><i class="fas fa-home"></i></button>
+        <button class="icon-button" onclick="exitVideo()"><i class="fas fa-arrow-left"></i></button>
     </div>
 
     <script src="scripts.js"></script>
