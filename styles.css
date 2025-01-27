@@ -12,6 +12,7 @@ body {
     justify-content: center;
     height: 100vh;
     background-color: #f4f4f4;
+    font-size: 18px; /* Aumenta el tamaño de la fuente en general */
 }
 
 .container-fluid {
@@ -64,7 +65,6 @@ body {
     height: 80vh; /* Adjust the height as needed */
     background: #ddd;
     display: flex;
-    justify-content: center;
     align-items: center;
     border: 2px solid #ccc;
     transition: transform 0.3s;
@@ -79,104 +79,6 @@ body {
 
 .box:hover {
     transform: scale(1.05);
-}
-
-.questions {
-    width: 80%;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.questions h2 {
-    margin-bottom: 20px;
-}
-
-.questions ul {
-    list-style-type: none;
-    padding: 0;
-    text-align: left;
-}
-
-.questions li {
-    background-color: #f9f9f9;
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 4px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
-.questions button {
-    background-color: #eee;
-    border: 1px solid #ccc;
-    padding: 20px; /* Increase padding for larger buttons */
-    cursor: pointer;
-    transition: background 0.3s;
-    width: 90%;
-    max-width: 800px; /* Increase max-width for larger buttons */
-    font-size: 20px; /* Increase font size */
-    text-align:left; /* Align text to the left */
-    margin: 0 auto; /* Center the buttons */
-}body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #f4f4f4;
-    font-size: 18px; /* Aumenta el tamaño de la fuente en general */
-}
-
-.container-fluid {
-    height: calc(100% - 20px);
-    margin: 10px;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-}
-
-.imagebox {
-    background: black;
-    padding: 0px;
-    position: relative;
-    text-align: center;
-    height: 100%;
-    width: 100%;
-}
-
-.imagebox img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    opacity: 1;
-    transition: 0.5s opacity;
-}
-
-.imagebox .imagebox-desc {
-    background-color: rgba(0, 0, 0, 0.6);
-    bottom: 0px;
-    color: white;
-    font-size: 1.8em; /* Tamaño de letra más grande */
-    font-weight: bold; /* Negrita */
-    text-transform: uppercase; /* Mayúsculas */
-    left: 0px;
-    padding: 10px 15px;
-    position: absolute;
-    transition: 0.5s padding;
-    text-align: center;
-    width: 100%;
-}
-
-.imagebox:hover img {
-    opacity: 0.7;
-}
-
-.imagebox:hover .imagebox-desc {
-    padding-bottom: 10%;
 }
 
 .questions {
@@ -207,9 +109,36 @@ body {
     border-radius: 4px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     font-size: 1.2em; /* Aumenta el tamaño de la fuente para los elementos de la lista */
+    cursor: pointer; /* Hace que el cursor cambie a una mano al pasar sobre el elemento */
+    transition: background 0.3s;
 }
 
-.back-button {
+.questions li:hover {
+    background-color: #ddd;
+}
+
+.questions button {
+    background-color: #eee;
+    border: 1px solid #ccc;
+    padding: 20px; /* Increase padding for larger buttons */
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 90%;
+    max-width: 800px; /* Increase max-width for larger buttons */
+    font-size: 20px; /* Increase font size */
+    text-align:left; /* Align text to the left */
+    margin: 0 auto; /* Center the buttons */
+}
+
+.questions button:hover {
+    background-color: #ddd;
+}
+
+.highlight {
+    background-color: #ff0 !important;
+}
+
+.back-button, .video-button {
     display: block;
     margin: 20px auto;
     padding: 10px 20px;
@@ -221,65 +150,38 @@ body {
     transition: background 0.3s;
 }
 
-.back-button:hover {
-    background-color: #555;
-}
-
-.questions button:hover {
-    background-color: #ddd;
-}
-
-.highlight {
-    background-color: #ff0 !important;
-}
-
-.back-button {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    background-color: #333;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background 0.3s;
-}
-
-.back-button:hover {
+.back-button:hover, .video-button:hover {
     background-color: #555;
 }
 
 .video-container {
-    display: none;
-    position: fixed; /* Fijo para ocupar toda la pantalla */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: black; /* Fondo negro para el contenedor */
-    z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
-    overflow: hidden; /* Asegúrate de que no haya barras de desplazamiento */
+    z-index: 1000;
 }
 
-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    display: block; /* Elimina el espacio en línea alrededor del iframe */
+.video-container iframe {
+    width: 80%;
+    height: 80%;
 }
 
 .exit-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    margin-top: 20px;
+    padding: 10px 20px;
     background-color: #333;
     color: white;
     border: none;
-    padding: 10px 20px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 18px;
     transition: background 0.3s;
-    z-index: 10; /* Ensure the button is above the iframe */
 }
 
 .exit-button:hover {
@@ -307,7 +209,9 @@ iframe {
     background-color: rgba(0, 0, 0, 0.6);
     bottom: 0px;
     color: white;
-    font-size: 1.2em;
+    font-size: 1.8em; /* Tamaño de letra más grande */
+    font-weight: bold; /* Negrita */
+    text-transform: uppercase; /* Mayúsculas */
     left: 0px;
     padding: 10px 15px;
     position: absolute;

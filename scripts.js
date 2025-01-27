@@ -16,9 +16,9 @@ const questions = {
         { question: '¿Cuál es tu presupuesto?', video: 'src/VIDEO/2.mp4' }
     ],
     escuela: [
-        { question: '¿Cuál es tu materia favorita?', video: 'src/VIDEO/3.mp4' },
-        { question: '¿Qué mejorarías en tu escuela?', video: 'src/VIDEO/3.mp4' },
-        { question: '¿Prefieres clases presenciales o virtuales?', video: 'src/VIDEO/3.mp4' }
+        { question: '¿Cuál es tu asignatura favorita?', video: 'src/VIDEO/3.mp4' },
+        { question: '¿Cuántos estudiantes hay en tu clase?', video: 'src/VIDEO/3.mp4' },
+        { question: '¿Qué actividades extracurriculares te gustan?', video: 'src/VIDEO/3.mp4' }
     ]
 };
 
@@ -37,27 +37,12 @@ function showQuestions(category) {
     const questionsContainer = document.getElementById('questions');
     questionsContainer.style.display = 'block';
     
-    // Aquí puedes agregar lógica para cargar las preguntas correspondientes a la categoría
-    const questions = {
-        casa: [
-            "¿Cuál es tu habitación favorita?",
-            "¿Cuántas personas viven en tu casa?",
-            "¿Tienes jardín en tu casa?"
-        ],
-        construccion: [
-            "¿Qué materiales se usan en la construcción?",
-            "¿Cuál es el edificio más alto que conoces?",
-            "¿Qué herramientas se necesitan para construir una casa?"
-        ],
-        escuela: [
-            "¿Cuál es tu asignatura favorita?",
-            "¿Cuántos estudiantes hay en tu clase?",
-            "¿Qué actividades extracurriculares te gustan?"
-        ]
-    };
-
     const selectedQuestions = questions[category] || [];
-    const questionsList = selectedQuestions.map(question => `<li>${question}</li>`).join('');
+    const questionsList = selectedQuestions.map(q => `
+        <li onclick="showVideo('${q.video}')">
+            ${q.question}
+        </li>
+    `).join('');
 
     questionsContainer.innerHTML = `
         <h2>Preguntas sobre ${category}</h2>
@@ -73,21 +58,40 @@ function goBackToMenu() {
     // Ocultar el contenedor de preguntas
     const questionsContainer = document.getElementById('questions');
     questionsContainer.style.display = 'none';
+    
+    // Ocultar el contenedor de video si está visible
+    const videoContainer = document.getElementById('video-container');
+    videoContainer.style.display = 'none';
+    
+    // Detener el video
+    const videoFrame = document.getElementById('video-frame');
+    videoFrame.src = '';
 }
 
 function showVideo(videoUrl) {
+    // Ocultar el contenedor de preguntas
+    document.getElementById('questions').style.display = 'none';
+    
+    // Mostrar el contenedor de video
+    const videoContainer = document.getElementById('video-container');
     videoContainer.style.display = 'block';
-    videoFrame.src = `${videoUrl}?controls=0`; // Add controls=0 to hide controls
-    enterFullScreen(videoContainer); // Request full screen for the video container
+    
+    // Establecer la URL del video
+    const videoFrame = document.getElementById('video-frame');
+    videoFrame.src = videoUrl;
 }
 
 function exitVideo() {
-    if (document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement) {
-        exitFullScreen();
-    }
+    // Ocultar el contenedor de video
+    const videoContainer = document.getElementById('video-container');
     videoContainer.style.display = 'none';
-    videoFrame.src = ''; // Stop the video
-    questionsDiv.style.display = 'flex';
+    
+    // Detener el video
+    const videoFrame = document.getElementById('video-frame');
+    videoFrame.src = '';
+    
+    // Mostrar el contenedor de preguntas
+    document.getElementById('questions').style.display = 'block';
 }
 
 function enterFullScreen(element) {
