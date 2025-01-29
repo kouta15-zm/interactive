@@ -67,32 +67,41 @@ function goBackToMenu() {
     const videoFrame = document.getElementById('video-frame');
     videoFrame.src = '';
 }
+    function showVideo(videoUrl) {
+        // Ocultar el contenedor de preguntas
+        document.getElementById('questions').style.display = 'none';
+        
+        // Mostrar el contenedor de video
+        const videoContainer = document.getElementById('video-container');
+        videoContainer.style.display = 'block';
+    
+        
+        // Establecer la URL del video
+        const videoFrame = document.getElementById('video-frame');
+        videoFrame.src = videoUrl;
+    
+        // Reproducir el video inmediatamente después de cargarlo
+        videoFrame.play(); 
 
-function showVideo(videoUrl) {
-    // Ocultar el contenedor de preguntas
-    document.getElementById('questions').style.display = 'none';
+        // Asegurarse de eliminar cualquier listener anterior y añadir uno nuevo
+        videoFrame.removeEventListener('ended', exitVideo); // Eliminar cualquier evento anterior
+        videoFrame.addEventListener('ended', exitVideo); // Agregar evento para cuando el video termine
+    }
     
-    // Mostrar el contenedor de video
-    const videoContainer = document.getElementById('video-container');
-    videoContainer.style.display = 'block';
+    function exitVideo() {
+        // Ocultar el contenedor de video
+        const videoContainer = document.getElementById('video-container');
+        videoContainer.style.display = 'none';
+        
+        // Detener el video
+        const videoFrame = document.getElementById('video-frame');
+        videoFrame.src = '';
     
-    // Establecer la URL del video
-    const videoFrame = document.getElementById('video-frame');
-    videoFrame.src = videoUrl;
-}
-
-function exitVideo() {
-    // Ocultar el contenedor de video
-    const videoContainer = document.getElementById('video-container');
-    videoContainer.style.display = 'none';
+        // Mostrar el contenedor de preguntas
+        const questionsContainer = document.getElementById('questions');
+        questionsContainer.style.display = 'block';
+    }
     
-    // Detener el video
-    const videoFrame = document.getElementById('video-frame');
-    videoFrame.src = '';
-    
-    // Mostrar el contenedor de preguntas
-    document.getElementById('questions').style.display = 'block';
-}
 
 function enterFullScreen(element) {
     if (element.requestFullscreen) {
