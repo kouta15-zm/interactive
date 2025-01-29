@@ -139,22 +139,18 @@ body {
 }
 
 .video-container {
-    width: 100vw; /* Ocupa todo el ancho de la pantalla */
-    height: 100vh; /* Ocupa toda la altura de la pantalla */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(0, 0, 0, 0.8);
-    position: fixed;
+    position: fixed; /* Hace que el video se quede fijo en la pantalla */
     top: 0;
     left: 0;
-    z-index: 1000;
+    width: 100vw;  /* 100% del ancho de la ventana */
+    height: 100vh; /* 100% de la altura de la ventana */
+    z-index: 9999; /* Asegura que el video esté por encima de otros elementos */
 }
 
-.video-container iframe {
+.video-frame {
     width: 100%;
     height: 100%;
+    object-fit: cover; /* Esto asegura que el video ocupe todo el espacio, manteniendo su relación de aspecto */
 }
 
 .exit-button {

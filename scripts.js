@@ -66,6 +66,16 @@ function goBackToMenu() {
     // Detener el video
     const videoFrame = document.getElementById('video-frame');
     videoFrame.src = '';
+
+    // Asegurarse de que los botones de "Volver" y "Menú Principal" estén visibles y habilitados
+    const backButton = document.querySelector('.back-button');
+    const homeButton = document.querySelector('.home-button');
+    
+    backButton.style.display = 'block'; // Mostrar el botón "Volver"
+    homeButton.style.display = 'block'; // Mostrar el botón "Menú Principal"
+
+    backButton.disabled = false; // Asegurarse de que no estén deshabilitados
+    homeButton.disabled = false; // Asegurarse de que no estén deshabilitados
 }
     function showVideo(videoUrl) {
         // Ocultar el contenedor de preguntas
@@ -74,19 +84,50 @@ function goBackToMenu() {
         // Mostrar el contenedor de video
         const videoContainer = document.getElementById('video-container');
         videoContainer.style.display = 'block';
-    
+        
+        // Establecer la URL del video
+        const videoFrame = document.getElementById('video-frame');
+        videoFrame.src = videoUrl;
+
+        // Asegurarse de que los botones de "Volver" y "Menú Principal" sigan visibles
+            const backButton = document.querySelector('.back-button');
+            const homeButton = document.querySelector('.home-button');
+
+        // Asegurarse de eliminar cualquier listener anterior y añadir uno nuevo
+        videoFrame.removeEventListener('ended', exitVideo); // Eliminar cualquier evento anterior
+        videoFrame.addEventListener('ended', exitVideo); // Agregar evento para cuando el video termine
+
+        // Reproducir el video inmediatamente después de cargarlo
+        videoFrame.play();
+
+        // Usar setTimeout para asegurar que el navegador permita pantalla completa
+        setTimeout(() => {
+            enterFullScreen(videoFrame); // Activar pantalla completa para el video
+        }, 100);  // 100ms de retraso, suficiente para que el video comience a reproducirse  
+
+    }
+    function showVideo(videoUrl) {
+        // Ocultar el contenedor de preguntas
+        document.getElementById('questions').style.display = 'none';
+        
+        // Mostrar el contenedor de video
+        const videoContainer = document.getElementById('video-container');
+        videoContainer.style.display = 'block';
         
         // Establecer la URL del video
         const videoFrame = document.getElementById('video-frame');
         videoFrame.src = videoUrl;
     
-        // Reproducir el video inmediatamente después de cargarlo
-        videoFrame.play(); 
-
         // Asegurarse de eliminar cualquier listener anterior y añadir uno nuevo
         videoFrame.removeEventListener('ended', exitVideo); // Eliminar cualquier evento anterior
         videoFrame.addEventListener('ended', exitVideo); // Agregar evento para cuando el video termine
+    
+        // Reproducir el video inmediatamente después de cargarlo
+        videoFrame.play();
+    
+        // No es necesario poner el video en pantalla completa, ya que usa todo el espacio de la ventana
     }
+
     
     function exitVideo() {
         // Ocultar el contenedor de video
@@ -100,6 +141,18 @@ function goBackToMenu() {
         // Mostrar el contenedor de preguntas
         const questionsContainer = document.getElementById('questions');
         questionsContainer.style.display = 'block';
+    
+        // Asegurarse de que los botones de "Volver" y "Menú Principal" sigan visibles
+        const backButton = document.querySelector('.back-button');
+        const homeButton = document.querySelector('.home-button');
+        
+        // Reestablecer el estado de los botones
+        backButton.style.display = 'block'; // Asegurarse de que el botón "Volver" esté visible
+        homeButton.style.display = 'block'; // Asegurarse de que el botón "Menú Principal" esté visible
+    
+        // Asegurarse de que los botones no estén bloqueados
+        backButton.disabled = false; // Asegúrese de que no estén deshabilitados
+        homeButton.disabled = false; // Asegúrese de que no estén deshabilitados
     }
     
 
@@ -116,13 +169,22 @@ function enterFullScreen(element) {
 }
 
 function exitFullScreen() {
-    if (document.exitFullscreen) {
-        document.exitFullscreen();
-    } else if (document.mozCancelFullScreen) { // Firefox
-        document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) { // Chrome, Safari, Opera
-        document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) { // IE/Edge
-        document.msExitFullscreen();
-    }
+    // Ocultar el contenedor de video
+    const videoContainer = document.getElementById('video-container');
+    videoContainer.style.display = 'none';
+    
+    // Detener el video
+    const videoFrame = document.getElementById('video-frame');
+    videoFrame.src = '';
+
+    // Mostrar el contenedor de preguntas
+    const questionsContainer = document.getElementById('questions');
+    questionsContainer.style.display = 'block';
+
+    // Asegurarse de que los botones de "Volver" y "Menú Principal" sigan visibles
+    const backButton = document.querySelector('.back-button');
+    const homeButton = document.querySelector('.home-button');
+    
+    backButton.style.display = 'block'; // Asegurarse de que el botón "Volver" esté visible
+    homeButton.style.display = 'block'; // Asegurarse de que el botón "Menú Principal" esté visible
 }
