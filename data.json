@@ -1,0 +1,38 @@
+{
+  "casa": {
+    "historia": [
+      { "question": "¿Cuándo se construyó betel en Chile?", "video": "src/videos/betel/betel historia -1.mp4" },
+      { "question": "¿Cuál fue la ubicación del primer betel?", "video": "src/videos/betel/betel historia -1.mp4" }
+    ],
+    "solicitudes": [
+      { "question": "¿Qué solicitud debo llenar ayudar en externo?", "video": "src/videos/betel/betel solicitud-1.mp4" },
+      { "question": "¿Qué solicitud debo llenar para vivir en betel?", "video": "src/videos/betel/betel solicitud-1.mp4" }
+    ],
+    "experiencias": [
+      { "question": "¿Cuál es tu mejor recuerdo en casa?", "video": "src/videos/betel/betel experiencias -1.mp4" },
+      { "question": "¿Qué experiencia marcó tu vida en betel?", "video": "src/videos/betel/betel experiencias -1.mp4" }
+    ]
+  },
+  "construccion": {
+    "historia": [
+      { "question": "¿Cuá?", "video": "src/videos/construccion/contruccion historia -1.mp4" }
+    ],
+    "solicitudes": [
+      { "question": "¿Qué materiales prefieres usar?", "video": "src/videos/construccion/construccion solicitud-1.mp4" }
+    ],
+    "experiencias": [
+      { "question": "¿Qué experiencia te marcó en la construcción?", "video": "src/videos/construccion/contruccion experiencias -1.mp4" }
+    ]
+  },
+  "escuela": {
+    "historia": [
+      { "question": "¿Cuál es la historia de tu escuela?", "video": "src/videos/escuela/escuela historia-1.mp4" }
+    ],
+    "solicitudes": [
+      { "question": "¿Qué mejorarías en tu escuela?", "video": "src/videos/escuela/escuela solicitud-1.mp4" }
+    ],
+    "experiencias": [
+      { "question": "¿Cuál es tu mejor experiencia escolar?", "video": "src/videos/escuela/escuela experiencias -1.mp4" }
+    ]
+  }
+} 

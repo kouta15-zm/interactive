@@ -2,190 +2,107 @@ body, html {
     height: 100%;
     margin: 0;
     padding: 0;
+    background: #f4f6fa;
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Arial, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #5a5656;
+    justify-content: flex-start;
+    min-height: 100vh;
+    background-color: #f4f6fa;
+    font-size: 18px;
+    color: #222;
+}
+
+#main-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2a3d66;
+    margin-bottom: 1rem;
 }
 
 .container-fluid {
-    height: calc(100% - 20px);
-    margin: 10px;
+    margin: 10px auto;
     padding: 0;
     display: flex;
     justify-content: center;
-}
-
-.menu {
-    display: flex;
-    justify-content: center;
-    gap: 50px;
-    background-color: #333;
-    padding: 10px;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.menu button {
-    color: rgb(128, 126, 126);
     background: none;
-    border: none;
-    padding: 10px 300px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.menu button:hover {
-    background-color: #555;
-}
-
-.box-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    gap: 30px;
-    margin: 50px 0;
-    width: 100%;
-    flex-wrap: wrap;
-}
-
-.box {
-    position: relative;
-    flex: 1;
-    max-width: calc(33.33% - 50px);
-    height: 80vh; /* Adjust the height as needed */
-    background: #8a8282;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid #ccc;
-    transition: transform 0.3s;
-    cursor: pointer;
-}
-
-.box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.box:hover {
-    transform: scale(1.05);
-}
-
-.questions {
-    width: 80%;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: rgb(146, 135, 135);
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.questions h2 {
-    margin-bottom: 20px;
-}
-
-.questions ul {
-    list-style-type: none;
-    padding: 0;
-    text-align: left;
-}
-
-.questions li {
-    background-color: #949090;
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 4px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
-.questions button {
-    background-color: #8d8585;
-    border: 1px solid #c7bbbb;
-    padding: 20px; /* Increase padding for larger buttons */
-    cursor: pointer;
-    transition: background 0.3s;
-    width: 90%;
-    max-width: 800px; /* Increase max-width for larger buttons */
-    font-size: 20px; /* Increase font size */
-    text-align: left; /* Align text to the left */
-    margin: 0 auto; /* Center the buttons */
-}
-
-body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #726c6c;
-    font-size: 18px; /* Aumenta el tamaño de la fuente en general */
+    min-height: 60vh;
 }
 
 .imagebox {
-    background: black;
-    padding: 0px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(44, 62, 80, 0.08);
+    padding: 0;
     position: relative;
     text-align: center;
     height: 100%;
     width: 100%;
+    transition: box-shadow 0.3s, transform 0.3s;
+    border: none;
+    outline: none;
+}
+
+.imagebox:focus, .imagebox:hover {
+    box-shadow: 0 8px 32px rgba(44, 62, 80, 0.16);
+    transform: scale(1.03);
 }
 
 .imagebox img {
-    height: 100%;
+    height: 70vh;
     width: 100%;
     object-fit: cover;
+    border-radius: 16px 16px 0 0;
     opacity: 1;
     transition: 0.5s opacity;
 }
 
-.imagebox .imagebox-desc {
-    background-color: rgba(0, 0, 0, 0.6);
-    bottom: 0px;
-    color: white;
-    font-size: 1.8em; /* Tamaño de letra más grande */
-    font-weight: bold; /* Negrita */
-    text-transform: uppercase; /* Mayúsculas */
-    left: 0px;
-    padding: 10px 15px;
-    position: absolute;
-    transition: 0.5s padding;
-    text-align: center;
+.imagebox-desc {
+    background-color: #2a3d66;
+    color: #fff;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 12px 0;
+    border-radius: 0 0 16px 16px;
+    display: block;
+    letter-spacing: 1px;
+}
+
+.category-btn {
     width: 100%;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    outline: none;
 }
 
-.imagebox:hover img {
-    opacity: 0.7;
-}
-
-.imagebox:hover .imagebox-desc {
-    padding-bottom: 10%;
+.category-btn:focus {
+    outline: 3px solid #2a3d66;
 }
 
 .questions {
-    width: 80%;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: rgb(74, 109, 167);
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 30px 20px;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(44, 62, 80, 0.08);
     text-align: center;
-    font-size: 1.2em; /* Aumenta el tamaño de la fuente para las preguntas */
+    font-size: 1.2em;
+    min-height: 200px;
 }
 
 .questions h2 {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    color: #2a3d66;
+    font-size: 1.6em;
 }
 
 .questions ul {
@@ -194,113 +111,206 @@ body {
     text-align: left;
 }
 
-.questions li {
-    background-color: #f9f9f9;
+.question-btn {
+    background-color: #eaf0fa;
+    color: #2a3d66;
     margin: 10px 0;
-    padding: 10px;
-    border-radius: 4px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    font-size: 1.2em; /* Aumenta el tamaño de la fuente para los elementos de la lista */
+    padding: 18px 20px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
+    font-size: 1.1em;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    outline: none;
+}
+
+.question-btn:focus, .question-btn:hover {
+    background-color: #2a3d66;
+    color: #fff;
 }
 
 .back-button {
     display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    background-color: #333;
-    color: white;
+    margin: 30px auto 0 auto;
+    padding: 14px 32px;
+    background-color: #2a3d66;
+    color: #fff;
     border: none;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 18px; /* Aumenta el tamaño de la fuente del botón */
-    transition: background 0.3s;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: background 0.2s;
+    outline: none;
 }
 
-.back-button:hover {
-    background-color: #555;
-}
-
-.questions button:hover {
-    background-color: #ddd;
-}
-
-
-.back-button {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    background-color: #333;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background 0.3s;
-}
-
-.back-button:hover {
-    background-color: #555;
+.back-button:focus, .back-button:hover {
+    background-color: #1b2640;
 }
 
 .video-container {
     display: none;
-    position: fixed; /* Fijo para ocupar toda la pantalla */
+    position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: black; /* Fondo negro para el contenedor */
-    z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
-    overflow: hidden; /* Asegúrate de que no haya barras de desplazamiento */
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    z-index: 1000;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
 }
 
-iframe {
-    width: 100%;
-    height: 100%;
+#video-frame {
+    width: 100vw;
+    height: 100vh;
+    background: #000;
     border: none;
-    display: block; /* Elimina el espacio en línea alrededor del iframe */
+    display: block;
+    border-radius: 0;
 }
 
-.exit-button {
+.video-controls {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: #333;
-    color: white;
+    top: 20px;
+    right: 30px;
+    z-index: 10;
+    display: flex;
+    gap: 10px;
+}
+
+.exit-button, .fullscreen-button {
+    background-color: #2a3d66;
+    color: #fff;
     border: none;
-    padding: 10px 20px;
+    padding: 12px 20px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 16px;
-    transition: background 0.3s;
-    z-index: 10; /* Ensure the button is above the iframe */
+    font-size: 1em;
+    font-weight: 600;
+    transition: background 0.2s;
+    outline: none;
 }
 
-.exit-button:hover {
-    background-color: #555;
+.exit-button:focus, .exit-button:hover, .fullscreen-button:focus, .fullscreen-button:hover {
+    background-color: #1b2640;
 }
 
-.video-controls .back-button {
-    background: rgba(255, 255, 255, 0.7);
+#loading-indicator {
+    background: rgba(255,255,255,0.95);
+    color: #2a3d66;
+    font-size: 1.3em;
+    font-weight: 600;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+    padding: 24px 40px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .imagebox img {
+        height: 50vh;
+    }
+    .questions {
+        padding: 16px 4px;
+    }
+    .video-controls {
+        top: 10px;
+        right: 10px;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 1s ease forwards;
+}
+
+.fade-out {
+    animation: fadeOutBlink 1s ease forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOutBlink {
+    0% { opacity: 1; }
+    30% { opacity: 0.3; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+.subcategory-btn {
+    background-color: #eaf0fa;
+    color: #2a3d66;
+    margin: 10px 0;
+    padding: 18px 20px;
+    border-radius: 8px;
     border: none;
-    padding: 10px;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
+    font-size: 1.1em;
+    width: 100%;
+    text-align: left;
     cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
-    transition: background 0.3s;
+    transition: background 0.2s, color 0.2s;
+    outline: none;
 }
 
-.video-controls .back-button:hover {
-    background: rgba(255, 255, 255, 0.9);
+.subcategory-btn:focus, .subcategory-btn:hover {
+    background-color: #2a3d66;
+    color: #fff;
 }
 
-.video-controls .home-button {
-    background: rgba(255, 255, 255, 0.7);
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
-    transition: background 0.3s;
+.imagebox a,
+.imagebox a:visited,
+.imagebox a:hover,
+.imagebox a:active,
+.imagebox a:focus {
+    text-decoration: none !important;
 }
 
-.video-controls .home-button:hover {
-    background: rgba(255, 255, 255, 0.9);
+.overlay-fade {
+    animation: overlayFadeOut 1s ease forwards;
+}
+
+@keyframes overlayFadeOut {
+    0% { opacity: 0; }
+    30% { opacity: 0.3; }
+    50% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+#video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0);
+    opacity: 1;
+    pointer-events: none;
+    z-index: 2000;
+    transition: background 1s ease;
+}
+
+.overlay-in {
+    background: rgba(0,0,0,1) !important;
+    transition: background 1s ease;
+}
+
+.overlay-out {
+    background: rgba(0,0,0,0) !important;
+    transition: background 0.2s ease;
 }
