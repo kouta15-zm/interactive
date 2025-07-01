@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="container-fluid">
+    <div class="container-fluid" id="category-menu">
         <div class="row">
             <div class="col-sm-4">
                 <div class="imagebox">
-                    <a href="javascript:void(0);" onclick="showQuestions('casa')">
+                    <a href="javascript:void(0);" onclick="showSubcategories('casa')">
                         <img src="src/IMAGEN/1.png" class="category-banner img-fluid">
                         <span class="imagebox-desc">Casa</span>
                     </a>
@@ -20,7 +20,7 @@
             </div>
             <div class="col-sm-4">
                 <div class="imagebox">
-                    <a href="javascript:void(0);" onclick="showQuestions('construccion')">
+                    <a href="javascript:void(0);" onclick="showSubcategories('construccion')">
                         <img src="src/IMAGEN/2.png" class="category-banner img-fluid">
                         <span class="imagebox-desc">Construcción</span>
                     </a>
@@ -28,7 +28,7 @@
             </div>
             <div class="col-sm-4">
                 <div class="imagebox">
-                    <a href="javascript:void(0);" onclick="showQuestions('escuela')">
+                    <a href="javascript:void(0);" onclick="showSubcategories('escuela')">
                         <img src="src/IMAGEN/3.png" class="category-banner img-fluid">
                         <span class="imagebox-desc">Escuela</span>
                     </a>
@@ -38,15 +38,16 @@
     </div>
 
     <div class="questions" id="questions" style="display: none;">
-        <!-- Questions will populate here -->
-        <button class="back-button" onclick="goBackToMenu()">Volver al Menú Principal</button>
+        <div id="questions-content"><!-- Aquí se mostrarán submenús y preguntas --></div>
+        <button class="back-button" id="back-to-menu" onclick="goBackToMenu()">Volver al Menú Principal</button>
     </div>
 
     <!-- Video Container -->
     <div class="video-container" id="video-container" style="display: none;">
-        <iframe id="video-frame" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        <video id="video-frame" src="" controls style="width:100%;height:100%;border-radius:0;display:block;background:#000;"></video>
         <button class="exit-button" onclick="exitVideo()">Salir del Video</button>
     </div>
+    <div id="video-overlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000;opacity:0;pointer-events:none;z-index:2000;"></div>
 
     <script src="scripts.js"></script>
 </body>
