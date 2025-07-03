@@ -9,30 +9,30 @@
       { "question": "¿Qué solicitud debo llenar para vivir en betel?", "video": "src/videos/betel/betel solicitud-1.mp4" }
     ],
     "experiencias": [
-      { "question": "¿Cuál es tu mejor recuerdo en casa?", "video": "src/videos/betel/betel experiencias -1.mp4" },
+      { "question": "¿Aque retos te has enfrentado y como jehova te ha ayudado?", "video": "src/videos/betel/betel experiencias -1.mp4" },
       { "question": "¿Qué experiencia marcó tu vida en betel?", "video": "src/videos/betel/betel experiencias -1.mp4" }
     ]
   },
   "construccion": {
     "historia": [
-      { "question": "¿Cuá?", "video": "src/videos/construccion/contruccion historia -1.mp4" }
+      { "question": "¿Cuál fue el primer salón construido en chile?", "video": "src/videos/construccion/contruccion historia -1.mp4" }
     ],
     "solicitudes": [
-      { "question": "¿Qué materiales prefieres usar?", "video": "src/videos/construccion/construccion solicitud-1.mp4" }
+      { "question": "¿Qué solicitud puedo llenar para ayudar en la construccion?", "video": "src/videos/construccion/construccion solicitud-1.mp4" }
     ],
     "experiencias": [
-      { "question": "¿Qué experiencia te marcó en la construcción?", "video": "src/videos/construccion/contruccion experiencias -1.mp4" }
+      { "question": "¿Que ha sido lo mejor de trabajar en la construccion?", "video": "src/videos/construccion/contruccion experiencias -1.mp4" }
     ]
   },
   "escuela": {
     "historia": [
-      { "question": "¿Cuál es la historia de tu escuela?", "video": "src/videos/escuela/escuela historia-1.mp4" }
+      { "question": "¿Cuando comenzo la escuela de evangelizadore?", "video": "src/videos/escuela/escuela historia-1.mp4" }
     ],
     "solicitudes": [
-      { "question": "¿Qué mejorarías en tu escuela?", "video": "src/videos/escuela/escuela solicitud-1.mp4" }
+      { "question": "¿Qué solicitud puedo llenar para ayudar en la escuela?", "video": "src/videos/escuela/escuela solicitud-1.mp4" }
     ],
     "experiencias": [
-      { "question": "¿Cuál es tu mejor experiencia escolar?", "video": "src/videos/escuela/escuela experiencias -1.mp4" }
+      { "question": "¿Qué beneficios has recibido por ofrecerte para hacer mas?", "video": "src/videos/escuela/escuela experiencias -1.mp4" }
     ]
   }
 } 
