@@ -363,3 +363,24 @@ body {
     font-family: monospace;
     margin-left: 10px;
 }
+
+.question-number {
+    display: inline-block;
+    background: #2a3d66;
+    color: #fff;
+    border-radius: 50%;
+    width: 2em;
+    height: 2em;
+    text-align: center;
+    line-height: 2em;
+    font-weight: bold;
+    margin-right: 12px;
+    font-size: 1.1em;
+}
+
+.highlighted-question {
+    background: #1b2640 !important;
+    color: #fff !important;
+    border: 2px solid #ffd700;
+    box-shadow: 0 0 8px #ffd70044;
+}

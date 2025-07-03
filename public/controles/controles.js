@@ -45,4 +45,36 @@ document.getElementById('volumeControl').oninput = (e) => {
 const homeBtn = document.getElementById('homeBtn');
 homeBtn.onclick = () => {
   socket.emit('control', { action: 'backToMenu' });
-}; 
+  if (categoryMenuControles) categoryMenuControles.style.display = 'block';
+  if (submenuControles) submenuControles.style.display = 'none';
+  currentCategory = null;
+};
+
+// Manejar clic en las cajas del menú principal de controles
+const categoryMenuControles = document.getElementById('category-menu-controles');
+const submenuControles = document.getElementById('submenu-controles');
+let currentCategory = null;
+if (categoryMenuControles) {
+  categoryMenuControles.addEventListener('click', (e) => {
+    const box = e.target.closest('.imagebox-controles');
+    if (box) {
+      const category = box.getAttribute('data-category');
+      currentCategory = category;
+      socket.emit('control', { action: 'selectCategory', category });
+      // Ocultar menú de cajas y mostrar submenú
+      categoryMenuControles.style.display = 'none';
+      if (submenuControles) submenuControles.style.display = 'block';
+    }
+  });
+}
+// Manejar clic en los botones del submenú
+if (submenuControles) {
+  submenuControles.addEventListener('click', (e) => {
+    const btn = e.target.closest('.submenu-btn');
+    if (btn && currentCategory) {
+      const index = parseInt(btn.getAttribute('data-index'), 10);
+      socket.emit('control', { action: 'selectSubmenu', category: currentCategory, index });
+      // (Opcional) puedes ocultar el submenú aquí si quieres
+    }
+  });
+} 

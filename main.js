@@ -1,17 +1,43 @@
 const { app, BrowserWindow, ipcMain, dialog, screen } = require('electron');
 const path = require('path');
 const fs = require('fs');
+const io = require('socket.io-client');
 
-let mainWindow;
+let mainWindow = null;
 let controlsWindow = null;
 let configPath = path.join(app.getPath('userData'), 'config.json');
+let socket = null;
 
-function createWindow() {
+function createControlsWindow() {
   const displays = screen.getAllDisplays();
   const primaryDisplay = screen.getPrimaryDisplay();
   const secondaryDisplay = displays.length > 1 ? displays.find(d => d.id !== primaryDisplay.id) : primaryDisplay;
 
-  // Ventana del reproductor en el monitor principal
+  controlsWindow = new BrowserWindow({
+    x: secondaryDisplay.bounds.x + 50,
+    y: secondaryDisplay.bounds.y + 50,
+    width: 600,
+    height: 500,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true
+    }
+  });
+  controlsWindow.loadFile(path.join(__dirname, 'public/controles/controles.html'));
+  controlsWindow.on('closed', () => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.close();
+    }
+    controlsWindow = null;
+  });
+}
+
+function createReproductorWindow() {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.focus();
+    return;
+  }
+  const primaryDisplay = screen.getPrimaryDisplay();
   mainWindow = new BrowserWindow({
     x: primaryDisplay.bounds.x,
     y: primaryDisplay.bounds.y,
@@ -25,46 +51,40 @@ function createWindow() {
     }
   });
   mainWindow.loadFile('index.htm');
-
-  // Ventana de controles en el segundo monitor (o en el mismo si solo hay uno)
-  openControlsWindow(secondaryDisplay);
-}
-
-function openControlsWindow(display) {
-  if (controlsWindow && !controlsWindow.isDestroyed()) {
-    controlsWindow.focus();
-    return;
-  }
-  // Si no se pasa display, usar el principal
-  const targetDisplay = display || screen.getPrimaryDisplay();
-  controlsWindow = new BrowserWindow({
-    x: targetDisplay.bounds.x + 50,
-    y: targetDisplay.bounds.y + 50,
-    width: 600,
-    height: 500,
-    frame: false,
-    webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+    if (controlsWindow && !controlsWindow.isDestroyed()) {
+      controlsWindow.close();
     }
   });
-  controlsWindow.loadFile(path.join(__dirname, 'public/controles/controles.html'));
-  controlsWindow.on('closed', () => {
-    controlsWindow = null;
-  });
 }
 
-function closeControlsWindow() {
-  if (controlsWindow && !controlsWindow.isDestroyed()) {
-    controlsWindow.close();
-    controlsWindow = null;
+function closeReproductorWindow() {
+  if (mainWindow && !mainWindow.isDestroyed()) {
+    mainWindow.close();
+    mainWindow = null;
   }
+}
+
+function setupSocketListener() {
+  socket = io('http://localhost:3000');
+  socket.on('reproductor', (data) => {
+    // Si se recibe un comando de reproducir video, abrir la ventana del reproductor
+    if (data.action === 'play' || data.action === 'selectCategory' || data.action === 'selectSubmenu' || data.action === 'seek' || data.action === 'volume' || data.action === 'next') {
+      createReproductorWindow();
+    }
+    // Si se recibe el comando de volver al menú, cerrar la ventana del reproductor
+    if (data.action === 'backToMenu' || data.action === 'stop') {
+      closeReproductorWindow();
+    }
+  });
 }
 
 app.whenReady().then(() => {
-  createWindow();
+  createControlsWindow();
+  setupSocketListener();
   app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    if (BrowserWindow.getAllWindows().length === 0) createControlsWindow();
   });
 });
 
@@ -96,18 +116,6 @@ ipcMain.handle('get-videos-folder', async () => {
     return defaultPath;
   }
   return null;
-});
-
-// IPC para abrir/cerrar ventana de controles
-ipcMain.on('open-controls-window', () => {
-  // Siempre abrir en el segundo monitor si existe
-  const displays = screen.getAllDisplays();
-  const primaryDisplay = screen.getPrimaryDisplay();
-  const secondaryDisplay = displays.length > 1 ? displays.find(d => d.id !== primaryDisplay.id) : primaryDisplay;
-  openControlsWindow(secondaryDisplay);
-});
-ipcMain.on('close-controls-window', () => {
-  closeControlsWindow();
 });
 
 function saveConfig(data) {

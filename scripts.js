@@ -27,7 +27,10 @@ boxes.forEach(box => {
     });
 });
 
-function showQuestions(category) {
+// Variable global para resaltar la pregunta seleccionada
+let lastHighlightedQuestion = null;
+
+function showQuestions(category, index) {
     // Ocultar el contenedor de imágenes
     document.querySelector('.container-fluid').style.display = 'none';
     
@@ -37,9 +40,9 @@ function showQuestions(category) {
     // Obtener las preguntas de la categoría seleccionada
     const selectedQuestions = questions[category] || [];
     
-    // Crear la lista de preguntas con eventos para reproducir videos
-    const questionsList = selectedQuestions.map((q, index) => 
-        `<li><button class="question-btn" data-video="${q.video}">${q.question}</button></li>`
+    // Crear la lista de preguntas con eventos para reproducir videos y numeración
+    const questionsList = selectedQuestions.map((q, idx) => 
+        `<li><button class="question-btn" data-video="${q.video}" data-idx="${idx}"><span class='question-number'>${idx+1}</span> ${q.question}</button></li>`
     ).join('');
 
     // Mostrar las preguntas en el contenedor
@@ -52,8 +55,18 @@ function showQuestions(category) {
     questionsDiv.addEventListener('click', function(e) {
         if (e.target.classList.contains('question-btn')) {
             showVideo(e.target.dataset.video);
+            highlightQuestionButton(e.target);
         }
     });
+
+    // Si se pasa un índice, simular el click en la pregunta correspondiente y resaltar
+    if (typeof index === 'number' && selectedQuestions[index]) {
+        const btns = questionsDiv.querySelectorAll('.question-btn');
+        if (btns[index]) {
+            highlightQuestionButton(btns[index]);
+            showVideo(selectedQuestions[index].video);
+        }
+    }
 }
 
 function goBackToMenu() {
@@ -374,5 +387,20 @@ if (socket) {
     if (data.action === 'backToMenu') {
       goBackToMenu();
     }
+    if (data.action === 'selectCategory' && data.category) {
+      showSubcategories(data.category);
+    }
+    if (data.action === 'selectSubmenu' && data.category && typeof data.index === 'number') {
+      showQuestions(data.category, data.index);
+    }
   });
+}
+
+// Función para resaltar la pregunta seleccionada
+function highlightQuestionButton(btn) {
+    if (lastHighlightedQuestion) {
+        lastHighlightedQuestion.classList.remove('highlighted-question');
+    }
+    btn.classList.add('highlighted-question');
+    lastHighlightedQuestion = btn;
 }
