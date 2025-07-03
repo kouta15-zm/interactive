@@ -69,6 +69,21 @@ function goBackToMenu() {
 
 let audioFadeInInterval = null;
 let audioFadeOutInterval = null;
+let videosBasePath = null;
+
+async function setVideosBasePath() {
+  if (window.electronAPI) {
+    videosBasePath = await window.electronAPI.getVideosFolder();
+  }
+}
+
+function getVideoPath(relativePath) {
+  if (videosBasePath && relativePath.startsWith('VIDEOS/')) {
+    // Quitar 'VIDEOS/' y unir con la ruta base
+    return videosBasePath + '/' + relativePath.substring(7);
+  }
+  return relativePath;
+}
 
 function showVideo(videoUrl) {
     const videoContainer = document.getElementById('video-container');
@@ -92,7 +107,7 @@ function showVideo(videoUrl) {
     videoContainer.style.display = 'block';
     videoFrame.pause();
     videoFrame.currentTime = 0;
-    videoFrame.src = videoUrl;
+    videoFrame.src = getVideoPath(videoUrl);
 
     // Pantalla completa al iniciar
     videoFrame.onplay = () => {
@@ -318,6 +333,7 @@ questionsContent.addEventListener('click', function(e) {
 window.addEventListener('DOMContentLoaded', async () => {
     await loadQuestionsData();
     backToMenuBtn.style.display = 'none';
+    setVideosBasePath();
 });
 
 // --- CONTROLES PERSONALIZADOS DE VIDEO ---

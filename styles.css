@@ -1,8 +1,9 @@
-body, html {
+html, body {
+    background: #000 !important;
+    color: #fff;
     height: 100%;
     margin: 0;
     padding: 0;
-    background: rgb(24, 26, 27);
 }
 
 body {
@@ -101,7 +102,7 @@ body {
 
 .questions h2 {
     margin-bottom: 24px;
-    color: #2a3d66;
+    color: #fff;
     font-size: 1.6em;
 }
 

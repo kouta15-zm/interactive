@@ -55,6 +55,25 @@
     </div>
     <div id="video-overlay" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:#000;opacity:0;pointer-events:none;z-index:2000;"></div>
 
+    <button id="select-folder-btn" style="display:none;position:fixed;top:10px;right:10px;z-index:3000;">Seleccionar carpeta de videos</button>
+    <script>
+      // Esperar a que la API de Electron esté disponible
+      window.addEventListener('DOMContentLoaded', async () => {
+        if (window.electronAPI) {
+          let videosPath = await window.electronAPI.getVideosFolder();
+          if (!videosPath) {
+            document.getElementById('select-folder-btn').style.display = 'block';
+            document.getElementById('select-folder-btn').onclick = async () => {
+              const selected = await window.electronAPI.selectVideosFolder();
+              if (selected) {
+                location.reload();
+              }
+            };
+          }
+        }
+      });
+    </script>
+
     <script src="scripts.js"></script>
 </body>
 </html>
