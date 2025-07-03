@@ -20,6 +20,7 @@
   "homepage": "https://github.com/kouta15-zm/interactive#readme",
   "description": "",
   "devDependencies": {
-    "electron": "^37.2.0"
+    "electron": "^37.2.0",
+    "electron-packager": "^17.1.2"
   }
 }
