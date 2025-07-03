@@ -107,13 +107,14 @@ function showVideo(videoUrl) {
 
     videoFrame.onloadeddata = () => {
         // Fade in de audio
-        videoFrame.volume = 0;
+        videoFrame.volume = 0.5;
         videoFrame.play();
         let fadeInStep = 0;
+        const fadeInSteps = 15; // 1.5 segundos (15 pasos de 100ms)
         audioFadeInInterval = setInterval(() => {
             fadeInStep++;
-            videoFrame.volume = Math.min(fadeInStep / 20, 1); // 20 pasos en 2 segundos
-            if (fadeInStep >= 20) {
+            videoFrame.volume = Math.min(0.5 + (fadeInStep / fadeInSteps) * 0.5, 1);
+            if (fadeInStep >= fadeInSteps) {
                 clearInterval(audioFadeInInterval);
                 audioFadeInInterval = null;
             }
@@ -179,10 +180,11 @@ function hideVideoWithFade(auto = false) {
     if (questionsSection) questionsSection.style.display = 'none';
     videoContainer.classList.remove('fade-in');
     void videoContainer.offsetWidth;
-    // Mostrar overlay y animar (background)
+    // Cambiar color del overlay para el parpadeo
+    videoOverlay.style.background = 'rgb(24, 26, 27)';
     videoOverlay.classList.remove('overlay-out');
     videoOverlay.classList.add('overlay-in');
-    // Esperar a que el overlay esté completamente negro (1s)
+    // Esperar a que el overlay esté completamente negro (0.2s)
     setTimeout(() => {
         // Ahora ocultamos visualmente el video y el contenedor (opacity: 0)
         videoFrame.pause();
@@ -197,13 +199,15 @@ function hideVideoWithFade(auto = false) {
         setTimeout(() => {
             videoOverlay.classList.remove('overlay-in');
             videoOverlay.classList.add('overlay-out');
+            // Restaurar el color transparente del overlay
+            videoOverlay.style.background = 'rgba(0,0,0,0)';
             // Ahora sí, ocultamos el video y el contenedor
             videoFrame.style.display = 'none';
             videoContainer.style.display = 'none';
             videoFrame.style.opacity = '1';
             videoContainer.style.opacity = '1';
-        }, 200);
-    }, 1000);
+        }, 10);
+    }, 10);
 }
 
 function enterFullScreen(element) {
@@ -315,3 +319,105 @@ window.addEventListener('DOMContentLoaded', async () => {
     await loadQuestionsData();
     backToMenuBtn.style.display = 'none';
 });
+
+// --- CONTROLES PERSONALIZADOS DE VIDEO ---
+(function(){
+    const video = document.getElementById('video-frame');
+    const controls = document.getElementById('custom-controls');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const volumeSlider = document.getElementById('volume-slider');
+    const progressBar = document.getElementById('progress-bar');
+    const timeIndicator = document.getElementById('time-indicator');
+    let controlsTimeout = null;
+
+    function formatTime(seconds) {
+        if (isNaN(seconds)) return '00:00';
+        const m = Math.floor(seconds / 60);
+        const s = Math.floor(seconds % 60);
+        return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+    }
+    function updateTimeIndicator() {
+        const current = formatTime(video.currentTime);
+        const total = formatTime(video.duration);
+        timeIndicator.textContent = `${current} / ${total}`;
+    }
+    function showControls() {
+        controls.style.display = 'flex';
+        controls.style.opacity = '1';
+        clearTimeout(controlsTimeout);
+        controlsTimeout = setTimeout(hideControls, 3000);
+    }
+    function hideControls() {
+        controls.style.opacity = '0';
+        setTimeout(()=>{ controls.style.display = 'none'; }, 300);
+    }
+    function togglePlayPause() {
+        if (video.paused) {
+            video.play();
+        } else {
+            video.pause();
+        }
+    }
+    function updatePlayPauseIcon() {
+        playPauseBtn.textContent = video.paused ? '▶️' : '⏸️';
+    }
+    function updateVolume() {
+        video.volume = volumeSlider.value;
+    }
+    function updateProgress() {
+        if (!isNaN(video.duration)) {
+            progressBar.value = (video.currentTime / video.duration) * 100;
+        }
+        updateTimeIndicator();
+    }
+    function seek(e) {
+        if (!isNaN(video.duration)) {
+            video.currentTime = (progressBar.value / 100) * video.duration;
+        }
+    }
+    // Mostrar controles al inicio
+    video.addEventListener('play', showControls);
+    // Mostrar controles al tocar/click en el video
+    video.addEventListener('click', function(e) {
+        showControls();
+        // Solo pausar/reanudar si el click/touch es en el centro (30% central)
+        const rect = video.getBoundingClientRect();
+        const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+        const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        if (Math.abs(x - centerX) < rect.width * 0.15 && Math.abs(y - centerY) < rect.height * 0.15) {
+            togglePlayPause();
+        }
+    });
+    video.addEventListener('touchstart', function(e) {
+        showControls();
+        // Solo pausar/reanudar si el touch es en el centro (30% central)
+        const rect = video.getBoundingClientRect();
+        const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+        const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        if (Math.abs(x - centerX) < rect.width * 0.15 && Math.abs(y - centerY) < rect.height * 0.15) {
+            togglePlayPause();
+        }
+    });
+    // Ocultar controles si no hay interacción
+    ['mousemove','touchmove'].forEach(evt => video.addEventListener(evt, showControls));
+    // Play/Pause
+    playPauseBtn.addEventListener('click', ()=>{ togglePlayPause(); showControls(); });
+    video.addEventListener('play', updatePlayPauseIcon);
+    video.addEventListener('pause', updatePlayPauseIcon);
+    // Volumen
+    volumeSlider.addEventListener('input', updateVolume);
+    // Progreso
+    video.addEventListener('timeupdate', updateProgress);
+    video.addEventListener('loadedmetadata', updateTimeIndicator);
+    progressBar.addEventListener('input', seek);
+    // Inicializar icono, volumen y tiempo
+    updatePlayPauseIcon();
+    updateVolume();
+    updateTimeIndicator();
+    // Ocultar controles al salir del video
+    document.getElementById('exit-video-btn')?.addEventListener('click', hideControls);
+})();
