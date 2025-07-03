@@ -1,4 +1,4 @@
-const socket = io();
+const socket = io('http://localhost:3000');
 
 // --- NUEVO: sincronización de progreso y tiempo ---
 const progressControl = document.getElementById('progressControl');

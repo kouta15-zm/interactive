@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, dialog, screen, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, screen } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -7,9 +7,16 @@ let controlsWindow = null;
 let configPath = path.join(app.getPath('userData'), 'config.json');
 
 function createWindow() {
+  const displays = screen.getAllDisplays();
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const secondaryDisplay = displays.length > 1 ? displays.find(d => d.id !== primaryDisplay.id) : primaryDisplay;
+
+  // Ventana del reproductor en el monitor principal
   mainWindow = new BrowserWindow({
-    width: 1920,
-    height: 1080,
+    x: primaryDisplay.bounds.x,
+    y: primaryDisplay.bounds.y,
+    width: primaryDisplay.bounds.width,
+    height: primaryDisplay.bounds.height,
     fullscreen: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -17,16 +24,38 @@ function createWindow() {
       contextIsolation: true
     }
   });
-
   mainWindow.loadFile('index.htm');
+
+  // Ventana de controles en el segundo monitor (o en el mismo si solo hay uno)
+  openControlsWindow(secondaryDisplay);
 }
 
-function openControlsWindow() {
-  shell.openExternal('http://localhost:3000/controles/controles.html');
+function openControlsWindow(display) {
+  if (controlsWindow && !controlsWindow.isDestroyed()) {
+    controlsWindow.focus();
+    return;
+  }
+  // Si no se pasa display, usar el principal
+  const targetDisplay = display || screen.getPrimaryDisplay();
+  controlsWindow = new BrowserWindow({
+    x: targetDisplay.bounds.x + 50,
+    y: targetDisplay.bounds.y + 50,
+    width: 600,
+    height: 500,
+    frame: false,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true
+    }
+  });
+  controlsWindow.loadFile(path.join(__dirname, 'public/controles/controles.html'));
+  controlsWindow.on('closed', () => {
+    controlsWindow = null;
+  });
 }
 
 function closeControlsWindow() {
-  if (controlsWindow) {
+  if (controlsWindow && !controlsWindow.isDestroyed()) {
     controlsWindow.close();
     controlsWindow = null;
   }
@@ -71,7 +100,11 @@ ipcMain.handle('get-videos-folder', async () => {
 
 // IPC para abrir/cerrar ventana de controles
 ipcMain.on('open-controls-window', () => {
-  openControlsWindow();
+  // Siempre abrir en el segundo monitor si existe
+  const displays = screen.getAllDisplays();
+  const primaryDisplay = screen.getPrimaryDisplay();
+  const secondaryDisplay = displays.length > 1 ? displays.find(d => d.id !== primaryDisplay.id) : primaryDisplay;
+  openControlsWindow(secondaryDisplay);
 });
 ipcMain.on('close-controls-window', () => {
   closeControlsWindow();
