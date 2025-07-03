@@ -1,0 +1,120 @@
+/* Fondo general */
+body {
+  background: #181a1b;
+  color: #fff;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.controls-container {
+  background: #181a1b;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  padding: 32px 40px;
+  max-width: 420px;
+  margin: 40px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+h1 {
+  color: #fff;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.main-controls {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 0;
+}
+
+.control-btn {
+  background: #23272b;
+  border: none;
+  color: #b0c4de;
+  font-size: 2.5em;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  outline: none;
+  cursor: pointer;
+}
+.control-btn:hover {
+  background: #2a3d66;
+  color: #fff;
+}
+
+.slider-group {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 0 6px 0;
+}
+
+label {
+  color: #b0c4de;
+  min-width: 70px;
+  text-align: right;
+}
+
+input[type="range"] {
+  accent-color: #2a3d66;
+  width: 180px;
+  height: 6px;
+  border-radius: 4px;
+  background: #23272b;
+}
+
+#progressControl {
+  width: 180px;
+}
+
+#volumeControl {
+  width: 80px;
+}
+
+#timeIndicator {
+  color: #b0c4de;
+  font-family: monospace;
+  font-size: 1.1em;
+  min-width: 80px;
+  text-align: right;
+}
+
+.home-btn {
+  display: block;
+  margin: 0 auto 18px auto;
+  background: #2a3d66;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 54px;
+  height: 54px;
+  font-size: 2em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.home-btn:hover {
+  background: #3b5ea7;
+  color: #fff;
+} 

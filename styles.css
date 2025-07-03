@@ -184,7 +184,7 @@ body {
     gap: 10px;
 }
 
-.exit-button, .fullscreen-button {
+.fullscreen-button {
     background-color: #2a3d66;
     color: #fff;
     border: none;
@@ -197,7 +197,7 @@ body {
     outline: none;
 }
 
-.exit-button:focus, .exit-button:hover, .fullscreen-button:focus, .fullscreen-button:hover {
+.fullscreen-button:focus, .fullscreen-button:hover {
     background-color: #1b2640;
 }
 

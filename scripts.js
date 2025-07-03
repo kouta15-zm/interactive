@@ -57,6 +57,8 @@ function showQuestions(category) {
 }
 
 function goBackToMenu() {
+    // Salir de pantalla completa si está activo
+    exitFullScreen();
     // Solo se usa para salidas manuales
     document.querySelector('.container-fluid').style.display = 'flex';
     const questionsSection = document.getElementById('questions');
@@ -70,6 +72,7 @@ function goBackToMenu() {
 let audioFadeInInterval = null;
 let audioFadeOutInterval = null;
 let videosBasePath = null;
+let controlsOpened = false;
 
 async function setVideosBasePath() {
   if (window.electronAPI) {
@@ -86,6 +89,13 @@ function getVideoPath(relativePath) {
 }
 
 function showVideo(videoUrl) {
+    if (!controlsOpened && window.electronAPI && window.electronAPI.openControlsWindow) {
+        window.electronAPI.openControlsWindow();
+        controlsOpened = true;
+    }
+    // Ocultar controles locales
+    const customControls = document.getElementById('custom-controls');
+    if (customControls) customControls.style.display = 'none';
     const videoContainer = document.getElementById('video-container');
     const videoFrame = document.getElementById('video-frame');
     const videoOverlay = document.getElementById('video-overlay');
@@ -157,36 +167,15 @@ function showVideo(videoUrl) {
         if (audioFadeOutInterval) { clearInterval(audioFadeOutInterval); audioFadeOutInterval = null; }
         hideVideoWithFade(true); // true = automático por finalización
     };
-
-    // Mostrar el botón de salir/volver al menú
-    let exitBtn = document.getElementById('exit-video-btn');
-    if (!exitBtn) {
-        exitBtn = document.createElement('button');
-        exitBtn.id = 'exit-video-btn';
-        exitBtn.textContent = 'Volver al menú anterior';
-        exitBtn.className = 'exit-button';
-        exitBtn.style.position = 'absolute';
-        exitBtn.style.top = '20px';
-        exitBtn.style.right = '20px';
-        exitBtn.style.zIndex = '3000';
-        exitBtn.onclick = exitVideo;
-        videoContainer.appendChild(exitBtn);
-    } else {
-        exitBtn.style.display = 'block';
-    }
-}
-
-function exitVideo() {
-    // Salir de pantalla completa si está activo
-    exitFullScreen();
-    // Oculta el video y vuelve al menú anterior
-    hideVideoWithFade(false);
-    // Oculta el botón de salir
-    let exitBtn = document.getElementById('exit-video-btn');
-    if (exitBtn) exitBtn.style.display = 'none';
 }
 
 function hideVideoWithFade(auto = false) {
+    if (window.electronAPI && window.electronAPI.closeControlsWindow) {
+        window.electronAPI.closeControlsWindow();
+    }
+    // Restaurar controles locales al salir del video
+    const customControls = document.getElementById('custom-controls');
+    if (customControls) customControls.style.display = '';
     const videoContainer = document.getElementById('video-container');
     const videoFrame = document.getElementById('video-frame');
     const videoOverlay = document.getElementById('video-overlay');
@@ -336,104 +325,54 @@ window.addEventListener('DOMContentLoaded', async () => {
     setVideosBasePath();
 });
 
-// --- CONTROLES PERSONALIZADOS DE VIDEO ---
-(function(){
-    const video = document.getElementById('video-frame');
-    const controls = document.getElementById('custom-controls');
-    const playPauseBtn = document.getElementById('play-pause-btn');
-    const volumeSlider = document.getElementById('volume-slider');
-    const progressBar = document.getElementById('progress-bar');
-    const timeIndicator = document.getElementById('time-indicator');
-    let controlsTimeout = null;
+// --- SOCKET.IO CONTROL REMOTO ---
+let socket = null;
+if (typeof io !== 'undefined') {
+  socket = io('http://localhost:3000');
+}
 
-    function formatTime(seconds) {
-        if (isNaN(seconds)) return '00:00';
-        const m = Math.floor(seconds / 60);
-        const s = Math.floor(seconds % 60);
-        return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-    }
-    function updateTimeIndicator() {
-        const current = formatTime(video.currentTime);
-        const total = formatTime(video.duration);
-        timeIndicator.textContent = `${current} / ${total}`;
-    }
-    function showControls() {
-        controls.style.display = 'flex';
-        controls.style.opacity = '1';
-        clearTimeout(controlsTimeout);
-        controlsTimeout = setTimeout(hideControls, 3000);
-    }
-    function hideControls() {
-        controls.style.opacity = '0';
-        setTimeout(()=>{ controls.style.display = 'none'; }, 300);
-    }
-    function togglePlayPause() {
-        if (video.paused) {
-            video.play();
-        } else {
-            video.pause();
-        }
-    }
-    function updatePlayPauseIcon() {
-        playPauseBtn.textContent = video.paused ? '▶️' : '⏸️';
-    }
-    function updateVolume() {
-        video.volume = volumeSlider.value;
-    }
-    function updateProgress() {
-        if (!isNaN(video.duration)) {
-            progressBar.value = (video.currentTime / video.duration) * 100;
-        }
-        updateTimeIndicator();
-    }
-    function seek(e) {
-        if (!isNaN(video.duration)) {
-            video.currentTime = (progressBar.value / 100) * video.duration;
-        }
-    }
-    // Mostrar controles al inicio
-    video.addEventListener('play', showControls);
-    // Mostrar controles al tocar/click en el video
-    video.addEventListener('click', function(e) {
-        showControls();
-        // Solo pausar/reanudar si el click/touch es en el centro (30% central)
-        const rect = video.getBoundingClientRect();
-        const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-        const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        if (Math.abs(x - centerX) < rect.width * 0.15 && Math.abs(y - centerY) < rect.height * 0.15) {
-            togglePlayPause();
-        }
+if (socket) {
+  const videoFrame = document.getElementById('video-frame');
+  // Actualizar barra de progreso y tiempo en controles
+  videoFrame.addEventListener('timeupdate', () => {
+    socket.emit('video-status', {
+      current: videoFrame.currentTime,
+      total: videoFrame.duration || 0
     });
-    video.addEventListener('touchstart', function(e) {
-        showControls();
-        // Solo pausar/reanudar si el touch es en el centro (30% central)
-        const rect = video.getBoundingClientRect();
-        const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-        const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        if (Math.abs(x - centerX) < rect.width * 0.15 && Math.abs(y - centerY) < rect.height * 0.15) {
-            togglePlayPause();
-        }
+  });
+  videoFrame.addEventListener('loadedmetadata', () => {
+    socket.emit('video-status', {
+      current: videoFrame.currentTime,
+      total: videoFrame.duration || 0
     });
-    // Ocultar controles si no hay interacción
-    ['mousemove','touchmove'].forEach(evt => video.addEventListener(evt, showControls));
-    // Play/Pause
-    playPauseBtn.addEventListener('click', ()=>{ togglePlayPause(); showControls(); });
-    video.addEventListener('play', updatePlayPauseIcon);
-    video.addEventListener('pause', updatePlayPauseIcon);
-    // Volumen
-    volumeSlider.addEventListener('input', updateVolume);
-    // Progreso
-    video.addEventListener('timeupdate', updateProgress);
-    video.addEventListener('loadedmetadata', updateTimeIndicator);
-    progressBar.addEventListener('input', seek);
-    // Inicializar icono, volumen y tiempo
-    updatePlayPauseIcon();
-    updateVolume();
-    updateTimeIndicator();
-    // Ocultar controles al salir del video
-    document.getElementById('exit-video-btn')?.addEventListener('click', hideControls);
-})();
+  });
+  socket.on('reproductor', (data) => {
+    console.log('Comando recibido en reproductor:', data);
+    if (!videoFrame) return;
+    if (data.action === 'play') {
+      videoFrame.play();
+    }
+    if (data.action === 'pause') {
+      videoFrame.pause();
+    }
+    if (data.action === 'stop') {
+      videoFrame.pause();
+      videoFrame.currentTime = 0;
+    }
+    if (data.action === 'next') {
+      videoFrame.src = 'VIDEOS/betel/betel historia -1.mp4';
+      videoFrame.play();
+    }
+    if (data.action === 'volume') {
+      videoFrame.volume = parseFloat(data.value);
+    }
+    if (data.action === 'seek') {
+      if (videoFrame.duration) {
+        videoFrame.currentTime = (parseFloat(data.value) / 100) * videoFrame.duration;
+      }
+    }
+    if (data.action === 'backToMenu') {
+      goBackToMenu();
+    }
+  });
+}

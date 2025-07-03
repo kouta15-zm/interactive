@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Controles de Video</title>
+    <link rel="stylesheet" href="controles.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script defer src="controles.js"></script>
+</head>
+<body>
+    <div class="controls-container">
+        <div class="home-row">
+            <button id="homeBtn" class="home-btn" title="Volver al menú principal">🏠</button>
+            <span class="home-label">Volver al menú principal</span>
+        </div>
+        <h1>Controles de Video</h1>
+        
+        <div class="main-controls">
+            <button id="playBtn" class="control-btn">▶️</button>
+            <button id="pauseBtn" class="control-btn">⏸️</button>
+            <button id="stopBtn" class="control-btn">⏹️</button>
+            <button id="nextBtn" class="control-btn">⏭️</button>
+        </div>
+        <div class="slider-group">
+            <label for="progressControl">Progreso</label>
+            <input type="range" id="progressControl" min="0" max="100" value="0">
+            <span id="timeIndicator">00:00 / 00:00</span>
+        </div>
+        <div class="slider-group">
+            <label for="volumeControl">Volumen</label>
+            <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.5">
+        </div>
+    </div>
+</body>
+</html> 
