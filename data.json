@@ -1,38 +1,38 @@
 {
   "casa": {
     "historia": [
-      { "question": "¿Cuándo se construyó betel en Chile?", "video": "src/videos/betel/betel historia -1.mp4" },
-      { "question": "¿Cuál fue la ubicación del primer betel?", "video": "src/videos/betel/betel historia -1.mp4" }
+      { "question": "¿Cuándo se construyó betel en Chile?", "video": "VIDEOS/betel/betel experiencias -1.mp4" },
+      { "question": "¿Cuál fue la ubicación del primer betel?", "video": "VIDEOS/betel/betel historia -1.mp4" }
     ],
     "solicitudes": [
-      { "question": "¿Qué solicitud debo llenar ayudar en externo?", "video": "src/videos/betel/betel solicitud-1.mp4" },
-      { "question": "¿Qué solicitud debo llenar para vivir en betel?", "video": "src/videos/betel/betel solicitud-1.mp4" }
+      { "question": "¿Qué solicitud debo llenar ayudar en externo?", "video": "VIDEOS/betel/betel solicitud-1.mp4" },
+      { "question": "¿Qué solicitud debo llenar para vivir en betel?", "video": "VIDEOS/betel/betel solicitud-1.mp4" }
     ],
     "experiencias": [
-      { "question": "¿Aque retos te has enfrentado y como jehova te ha ayudado?", "video": "src/videos/betel/betel experiencias -1.mp4" },
-      { "question": "¿Qué experiencia marcó tu vida en betel?", "video": "src/videos/betel/betel experiencias -1.mp4" }
+      { "question": "¿Aque retos te has enfrentado y como jehova te ha ayudado?", "video": "VIDEOS/betel/betel experiencias -1.mp4" },
+      { "question": "¿Qué experiencia marcó tu vida en betel?", "video": "VIDEOS/betel/betel experiencias -1.mp4" }
     ]
   },
   "construccion": {
     "historia": [
-      { "question": "¿Cuál fue el primer salón construido en chile?", "video": "src/videos/construccion/contruccion historia -1.mp4" }
+      { "question": "¿Cuál fue el primer salón construido en chile?", "video": "VIDEOS/construccion/contruccion historia -1.mp4" }
     ],
     "solicitudes": [
-      { "question": "¿Qué solicitud puedo llenar para ayudar en la construccion?", "video": "src/videos/construccion/construccion solicitud-1.mp4" }
+      { "question": "¿Qué solicitud puedo llenar para ayudar en la construccion?", "video": "VIDEOS/construccion/construccion solicitud-1.mp4" }
     ],
     "experiencias": [
-      { "question": "¿Que ha sido lo mejor de trabajar en la construccion?", "video": "src/videos/construccion/contruccion experiencias -1.mp4" }
+      { "question": "¿Que ha sido lo mejor de trabajar en la construccion?", "video": "VIDEOS/construccion/contruccion experiencias -1.mp4" }
     ]
   },
   "escuela": {
     "historia": [
-      { "question": "¿Cuando comenzo la escuela de evangelizadore?", "video": "src/videos/escuela/escuela historia-1.mp4" }
+      { "question": "¿Cuando comenzo la escuela de evangelizadore?", "video": "VIDEOS/escuela/escuela historia-1.mp4" }
     ],
     "solicitudes": [
-      { "question": "¿Qué solicitud puedo llenar para ayudar en la escuela?", "video": "src/videos/escuela/escuela solicitud-1.mp4" }
+      { "question": "¿Qué solicitud puedo llenar para ayudar en la escuela?", "video": "VIDEOS/escuela/escuela solicitud-1.mp4" }
     ],
     "experiencias": [
-      { "question": "¿Qué beneficios has recibido por ofrecerte para hacer mas?", "video": "src/videos/escuela/escuela experiencias -1.mp4" }
+      { "question": "¿Qué beneficios has recibido por ofrecerte para hacer mas?", "video": "VIDEOS/escuela/escuela experiencias -1.mp4" }
     ]
   }
 } 
