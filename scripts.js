@@ -59,6 +59,9 @@ function showQuestions(category, index) {
         }
     });
 
+    // Emitir estado playing:false a controles (en submenú)
+    if (socket) socket.emit('video-status', { playing: false });
+
     // Si se pasa un índice, simular el click en la pregunta correspondiente y resaltar
     if (typeof index === 'number' && selectedQuestions[index]) {
         const btns = questionsDiv.querySelectorAll('.question-btn');
@@ -72,14 +75,30 @@ function showQuestions(category, index) {
 function goBackToMenu() {
     // Salir de pantalla completa si está activo
     exitFullScreen();
-    // Solo se usa para salidas manuales
+    // Mostrar menú principal
     document.querySelector('.container-fluid').style.display = 'flex';
+    // Ocultar preguntas y video
     const questionsSection = document.getElementById('questions');
     if (questionsSection) questionsSection.style.display = 'none';
     const videoContainer = document.getElementById('video-container');
     if (videoContainer) videoContainer.style.display = 'none';
     const videoFrame = document.getElementById('video-frame');
-    if (videoFrame) videoFrame.src = '';
+    if (videoFrame) {
+        videoFrame.pause();
+        videoFrame.src = '';
+        videoFrame.style.display = 'none';
+    }
+    // Ocultar controles de video personalizados
+    const customControls = document.getElementById('custom-controls');
+    if (customControls) customControls.style.display = 'none';
+    // Quitar overlays si existen
+    const videoOverlay = document.getElementById('video-overlay');
+    if (videoOverlay) {
+        videoOverlay.classList.remove('overlay-in', 'overlay-out');
+        videoOverlay.style.background = 'rgba(0,0,0,0)';
+    }
+    // Emitir estado playing:false a controles
+    if (socket) socket.emit('video-status', { playing: false });
 }
 
 let audioFadeInInterval = null;
@@ -106,9 +125,9 @@ function showVideo(videoUrl) {
         window.electronAPI.openControlsWindow();
         controlsOpened = true;
     }
-    // Ocultar controles locales
+    // Mostrar controles de video solo cuando se reproduce un video
     const customControls = document.getElementById('custom-controls');
-    if (customControls) customControls.style.display = 'none';
+    if (customControls) customControls.style.display = 'flex';
     const videoContainer = document.getElementById('video-container');
     const videoFrame = document.getElementById('video-frame');
     const videoOverlay = document.getElementById('video-overlay');
@@ -180,6 +199,9 @@ function showVideo(videoUrl) {
         if (audioFadeOutInterval) { clearInterval(audioFadeOutInterval); audioFadeOutInterval = null; }
         hideVideoWithFade(true); // true = automático por finalización
     };
+
+    // Emitir estado playing:true a controles
+    if (socket) socket.emit('video-status', { playing: true });
 }
 
 function hideVideoWithFade(auto = false) {
@@ -305,6 +327,8 @@ function showSubcategories(category) {
     questionsSection.style.display = 'block';
     backToMenuBtn.style.display = 'block';
     renderSubcategories(category);
+    // Emitir estado playing:false a controles (en subcategoría)
+    if (socket) socket.emit('video-status', { playing: false });
 }
 
 function renderSubcategories(category) {

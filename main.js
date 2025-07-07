@@ -69,12 +69,12 @@ function closeReproductorWindow() {
 function setupSocketListener() {
   socket = io('http://localhost:3000');
   socket.on('reproductor', (data) => {
-    // Si se recibe un comando de reproducir video, abrir la ventana del reproductor
-    if (data.action === 'play' || data.action === 'selectCategory' || data.action === 'selectSubmenu' || data.action === 'seek' || data.action === 'volume' || data.action === 'next') {
+    // Solo abrir la ventana del reproductor al recibir comandos de reproducción
+    if (data.action === 'play' || data.action === 'seek' || data.action === 'volume' || data.action === 'next') {
       createReproductorWindow();
     }
-    // Si se recibe el comando de volver al menú, cerrar la ventana del reproductor
-    if (data.action === 'backToMenu' || data.action === 'stop') {
+    // Si se recibe el comando de stop, cerrar la ventana del reproductor
+    if (data.action === 'stop') {
       closeReproductorWindow();
     }
   });
@@ -82,9 +82,13 @@ function setupSocketListener() {
 
 app.whenReady().then(() => {
   createControlsWindow();
+  createReproductorWindow();
   setupSocketListener();
   app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) createControlsWindow();
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createControlsWindow();
+      createReproductorWindow();
+    }
   });
 });
 

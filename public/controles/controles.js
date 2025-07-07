@@ -48,6 +48,7 @@ homeBtn.onclick = () => {
   if (categoryMenuControles) categoryMenuControles.style.display = 'block';
   if (submenuControles) submenuControles.style.display = 'none';
   currentCategory = null;
+  socket.emit('video-status', { playing: false });
 };
 
 // Manejar clic en las cajas del menú principal de controles
@@ -73,8 +74,57 @@ if (submenuControles) {
     const btn = e.target.closest('.submenu-btn');
     if (btn && currentCategory) {
       const index = parseInt(btn.getAttribute('data-index'), 10);
-      socket.emit('control', { action: 'selectSubmenu', category: currentCategory, index });
+      socket.emit('control', { action: 'selectSubmenu', category: currentCategory, index: 0 });
       // (Opcional) puedes ocultar el submenú aquí si quieres
     }
   });
-} 
+}
+
+function goBackToMenu() {
+    // Salir de pantalla completa si está activo
+    exitFullScreen();
+    // Mostrar menú principal
+    document.querySelector('.container-fluid').style.display = 'flex';
+    // Ocultar preguntas y video
+    const questionsSection = document.getElementById('questions');
+    if (questionsSection) questionsSection.style.display = 'none';
+    const videoContainer = document.getElementById('video-container');
+    if (videoContainer) videoContainer.style.display = 'none';
+    const videoFrame = document.getElementById('video-frame');
+    if (videoFrame) {
+        videoFrame.pause();
+        videoFrame.src = '';
+        videoFrame.style.display = 'none';
+    }
+    // Ocultar controles de video personalizados
+    const customControls = document.getElementById('custom-controls');
+    if (customControls) customControls.style.display = 'none';
+    // Quitar overlays si existen
+    const videoOverlay = document.getElementById('video-overlay');
+    if (videoOverlay) {
+        videoOverlay.classList.remove('overlay-in', 'overlay-out');
+        videoOverlay.style.background = 'rgba(0,0,0,0)';
+    }
+}
+
+socket.on('video-status', (data) => {
+    const videoControlsTitle = document.getElementById('video-controls-title');
+    if (data.playing === false) {
+        document.querySelector('.main-controls').style.display = 'none';
+        document.querySelectorAll('.slider-group').forEach(el => el.style.display = 'none');
+        if (videoControlsTitle) videoControlsTitle.style.display = 'none';
+    } else if (data.playing === true) {
+        document.querySelector('.main-controls').style.display = 'flex';
+        document.querySelectorAll('.slider-group').forEach(el => el.style.display = 'flex');
+        if (videoControlsTitle) videoControlsTitle.style.display = 'block';
+    }
+});
+
+socket.emit('video-status', { playing: true });
+
+window.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('.main-controls').style.display = 'none';
+    document.querySelectorAll('.slider-group').forEach(el => el.style.display = 'none');
+    const videoControlsTitle = document.getElementById('video-controls-title');
+    if (videoControlsTitle) videoControlsTitle.style.display = 'none';
+});
