@@ -389,8 +389,12 @@ if (socket) {
     if (data.action === 'selectCategory' && data.category) {
       showSubcategories(data.category);
     }
-    if (data.action === 'selectSubmenu' && data.category && typeof data.index === 'number') {
-      showQuestions(data.category, data.index);
+    if (data.action === 'selectSubmenu' && data.category && (data.subcat || typeof data.index === 'number')) {
+      if (data.subcat) {
+        showQuestions(data.category, data.subcat);
+      } else {
+        showQuestions(data.category, data.index);
+      }
     }
   });
 }

@@ -61,16 +61,28 @@ homeBtn.onclick = showCategoryMenuControles;
 const categoryMenuControles = document.getElementById('category-menu-controles');
 const submenuControles = document.getElementById('submenu-controles');
 let currentCategory = null;
+let subcategories = [];
 if (categoryMenuControles) {
   categoryMenuControles.addEventListener('click', (e) => {
     const box = e.target.closest('.imagebox-controles');
     if (box) {
       const category = box.getAttribute('data-category');
       currentCategory = category;
-      socket.emit('control', { action: 'selectCategory', category });
-      // Ocultar menú de cajas y mostrar submenú
+      // Cargar subcategorías dinámicamente desde data.json
+      fetch('../../data.json')
+        .then(res => res.json())
+        .then(data => {
+          subcategories = Object.keys(data[category] || {});
+          // Actualizar los botones del submenú con los números
+          if (submenuControles) {
+            submenuControles.innerHTML = `<div class="submenu-row">${subcategories.map((sub, idx) => `<button class="submenu-btn" data-index="${idx}">${idx+1}</button>`).join('')}</div>`;
+            submenuControles.style.display = 'block';
+          }
+        });
+      // Ocultar menú de cajas
       categoryMenuControles.style.display = 'none';
-      if (submenuControles) submenuControles.style.display = 'block';
+      // Emitir selección de categoría
+      socket.emit('control', { action: 'selectCategory', category });
     }
   });
 }
@@ -80,8 +92,22 @@ if (submenuControles) {
     const btn = e.target.closest('.submenu-btn');
     if (btn && currentCategory) {
       const index = parseInt(btn.getAttribute('data-index'), 10);
-      socket.emit('control', { action: 'selectSubmenu', category: currentCategory, index });
-      // (Opcional) puedes ocultar el submenú aquí si quieres
+      const subcat = subcategories[index];
+      // Resaltar el botón seleccionado
+      submenuControles.querySelectorAll('.submenu-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      // Asegurar conexión socket antes de emitir
+      if (socket && socket.connected) {
+        socket.emit('control', { action: 'selectSubmenu', category: currentCategory, subcat, index });
+      } else {
+        // Intentar reconectar si está desconectado
+        if (socket && typeof socket.connect === 'function') socket.connect();
+        setTimeout(() => {
+          if (socket && socket.connected) {
+            socket.emit('control', { action: 'selectSubmenu', category: currentCategory, subcat, index });
+          }
+        }, 300);
+      }
     }
   });
 }
