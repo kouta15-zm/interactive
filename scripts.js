@@ -1,31 +1,5 @@
-const boxes = document.querySelectorAll('.box');
 const home = document.getElementById('home');
 const questionsDiv = document.getElementById('questions');
-
-const questions = {
-    casa: [
-        { question: '¿Cuál es tu habitación favorita?', video: 'src/VIDEO/1.mp4' },
-        { question: '¿Qué mejoras harías en tu casa?', video: 'src/VIDEO/1.mp4' },
-        { question: '¿Prefieres un estilo moderno o clásico?', video: 'src/VIDEO/1.mp4' }
-    ],
-    construccion: [
-        { question: '¿Qué tipo de edificio te interesa construir?', video: 'src/VIDEO/2.mp4' },
-        { question: '¿Qué materiales prefieres usar?', video: 'src/VIDEO/2.mp4' },
-        { question: '¿Cuál es tu presupuesto?', video: 'src/VIDEO/2.mp4' }
-    ],
-    escuela: [
-        { question: '¿Cuál es tu materia favorita?', video: 'src/VIDEO/3.mp4' },
-        { question: '¿Qué mejorarías en tu escuela?', video: 'src/VIDEO/3.mp4' },
-        { question: '¿Prefieres clases presenciales o virtuales?', video: 'src/VIDEO/3.mp4' }
-    ]
-};
-
-boxes.forEach(box => {
-    box.addEventListener('click', () => {
-        const category = box.dataset.category;
-        showQuestions(category);
-    });
-});
 
 // Variable global para resaltar la pregunta seleccionada
 let lastHighlightedQuestion = null;
@@ -38,7 +12,7 @@ function showQuestions(category, index) {
     questionsDiv.style.display = 'block';
     
     // Obtener las preguntas de la categoría seleccionada
-    const selectedQuestions = questions[category] || [];
+    const selectedQuestions = questionsData[category] || [];
     
     // Crear la lista de preguntas con eventos para reproducir videos y numeración
     const questionsList = selectedQuestions.map((q, idx) => 
@@ -277,27 +251,6 @@ function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function showQuestionsOfSubcategory(subcat) {
-    currentSubcategory = subcat;
-    renderQuestions(currentCategory, subcat);
-}
-
-function renderQuestions(category, subcat) {
-    const selected = (questionsData[category] && questionsData[category][subcat]) || [];
-    if (selected.length === 0) {
-        questionsContent.innerHTML = '<p>No hay preguntas disponibles.</p>';
-        return;
-    }
-    questionsContent.innerHTML = `
-        <h2>${capitalize(subcat)} de la ${capitalize(category)}</h2>
-        <ul class="list-unstyled">
-            ${selected.map((q, i) => `<li><button class="question-btn" data-video="${q.video}" tabindex="0">${q.question}</button></li>`).join('')}
-        </ul>
-        <button class="back-button mt-3" id="back-to-submenu">Volver a Subcategorías</button>
-    `;
-    document.getElementById('back-to-submenu').onclick = () => renderSubcategories(currentCategory);
-}
-
 // --- Variables globales y carga dinámica de datos ---
 let questionsData = {};
 let currentCategory = null;
@@ -345,6 +298,27 @@ function renderSubcategories(category) {
     `;
 }
 
+function showQuestionsOfSubcategory(subcat) {
+    currentSubcategory = subcat;
+    renderQuestions(currentCategory, subcat);
+}
+
+function renderQuestions(category, subcat) {
+    const selected = (questionsData[category] && questionsData[category][subcat]) || [];
+    if (selected.length === 0) {
+        questionsContent.innerHTML = '<p>No hay preguntas disponibles.</p>';
+        return;
+    }
+    questionsContent.innerHTML = `
+        <h2>${capitalize(subcat)} de la ${capitalize(category)}</h2>
+        <ul class="list-unstyled">
+            ${selected.map((q, i) => `<li><button class="question-btn" data-video="${q.video}" tabindex="0">${q.question}</button></li>`).join('')}
+        </ul>
+        <button class="back-button mt-3" id="back-to-submenu">Volver a Subcategorías</button>
+    `;
+    document.getElementById('back-to-submenu').onclick = () => renderSubcategories(currentCategory);
+}
+
 // --- Eventos para subcategorías y preguntas ---
 questionsContent.addEventListener('click', function(e) {
     if (e.target.classList.contains('subcategory-btn')) {
@@ -352,6 +326,7 @@ questionsContent.addEventListener('click', function(e) {
     }
     if (e.target.classList.contains('question-btn')) {
         showVideo(e.target.dataset.video);
+        highlightQuestionButton(e.target);
     }
 });
 

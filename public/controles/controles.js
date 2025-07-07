@@ -42,14 +42,20 @@ document.getElementById('volumeControl').oninput = (e) => {
     socket.emit('control', { action: 'volume', value: e.target.value });
 };
 
+// Mostrar menú principal de categorías solo cuando corresponde
+function showCategoryMenuControles() {
+    const categoryMenuControles = document.getElementById('category-menu-controles');
+    const submenuControles = document.getElementById('submenu-controles');
+    if (categoryMenuControles) categoryMenuControles.style.display = 'block';
+    if (submenuControles) submenuControles.style.display = 'none';
+    // Emitir estado para sincronizar con el reproductor
+    socket.emit('control', { action: 'backToMenu' });
+    socket.emit('video-status', { playing: false });
+}
+
+// Modificar el homeBtn para usar la función
 const homeBtn = document.getElementById('homeBtn');
-homeBtn.onclick = () => {
-  socket.emit('control', { action: 'backToMenu' });
-  if (categoryMenuControles) categoryMenuControles.style.display = 'block';
-  if (submenuControles) submenuControles.style.display = 'none';
-  currentCategory = null;
-  socket.emit('video-status', { playing: false });
-};
+homeBtn.onclick = showCategoryMenuControles;
 
 // Manejar clic en las cajas del menú principal de controles
 const categoryMenuControles = document.getElementById('category-menu-controles');
@@ -74,7 +80,7 @@ if (submenuControles) {
     const btn = e.target.closest('.submenu-btn');
     if (btn && currentCategory) {
       const index = parseInt(btn.getAttribute('data-index'), 10);
-      socket.emit('control', { action: 'selectSubmenu', category: currentCategory, index: 0 });
+      socket.emit('control', { action: 'selectSubmenu', category: currentCategory, index });
       // (Opcional) puedes ocultar el submenú aquí si quieres
     }
   });
@@ -109,14 +115,24 @@ function goBackToMenu() {
 
 socket.on('video-status', (data) => {
     const videoControlsTitle = document.getElementById('video-controls-title');
+    const submenuControles = document.getElementById('submenu-controles');
     if (data.playing === false) {
         document.querySelector('.main-controls').style.display = 'none';
         document.querySelectorAll('.slider-group').forEach(el => el.style.display = 'none');
         if (videoControlsTitle) videoControlsTitle.style.display = 'none';
+        // Mostrar submenú solo si corresponde (no video)
+        if (submenuControles && submenuControles.dataset.forceHide !== 'true') {
+            submenuControles.style.display = 'block';
+        }
     } else if (data.playing === true) {
         document.querySelector('.main-controls').style.display = 'flex';
         document.querySelectorAll('.slider-group').forEach(el => el.style.display = 'flex');
         if (videoControlsTitle) videoControlsTitle.style.display = 'block';
+        // Ocultar submenú al reproducir video
+        if (submenuControles) {
+            submenuControles.style.display = 'none';
+            submenuControles.dataset.forceHide = 'true';
+        }
     }
 });
 

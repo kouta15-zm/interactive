@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "start:server": "node server.js"
+    "start:server": "node server.js",
+    "test:ui": "playwright test"
   },
   "repository": {
     "type": "git",
@@ -21,8 +22,10 @@
   "homepage": "https://github.com/kouta15-zm/interactive#readme",
   "description": "",
   "devDependencies": {
+    "@playwright/test": "^1.53.2",
     "electron": "^37.2.0",
-    "electron-packager": "^17.1.2"
+    "electron-packager": "^17.1.2",
+    "playwright": "^1.43.1"
   },
   "dependencies": {
     "express": "^5.1.0",
