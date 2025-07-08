@@ -189,3 +189,62 @@ function hideReproductorControles() {
     const videoControlsTitle = document.getElementById('video-controls-title');
     if (videoControlsTitle) videoControlsTitle.style.display = 'none';
 }
+
+socket.on('showQuestionsMenu', (data) => {
+    const submenuControles = document.getElementById('submenu-controles');
+    if (submenuControles) {
+        submenuControles.innerHTML = '';
+        submenuControles.innerHTML = `<div class="submenu-row">${
+            data.questions.map((q, idx) =>
+                `<button class="question-btn" data-question-index="${idx}">${q.question}</button>`
+            ).join('')
+        }</div>`;
+        submenuControles.style.display = 'block';
+        // Asignar eventos a los botones
+        submenuControles.querySelectorAll('.question-btn').forEach(qbtn => {
+            qbtn.onclick = () => {
+                const qIdx = parseInt(qbtn.getAttribute('data-question-index'), 10);
+                const question = data.questions[qIdx];
+                if (socket && socket.connected) {
+                    socket.emit('control', {
+                        action: 'selectQuestion',
+                        category: data.category,
+                        subcat: data.subcat,
+                        questionIndex: qIdx,
+                        question: question.question,
+                        video: question.video
+                    });
+                }
+                // Ocultar preguntas y mostrar controles de video
+                submenuControles.style.display = 'none';
+                document.querySelector('.main-controls').style.display = 'flex';
+                document.querySelectorAll('.slider-group').forEach(el => el.style.display = 'flex');
+                const videoControlsTitle = document.getElementById('video-controls-title');
+                if (videoControlsTitle) videoControlsTitle.style.display = 'block';
+            };
+        });
+    }
+});
+
+socket.on('control', (data) => {
+    console.log('Recibido en reproductor:', data);
+    if (data.action === 'selectQuestion' && data.video) {
+        showVideo(data.video);
+        // Resalta la pregunta si está visible
+        const questionBtns = document.querySelectorAll('.question-btn');
+        questionBtns.forEach((btn, idx) => {
+            btn.classList.remove('highlighted-question');
+            if (btn.dataset.video === data.video) {
+                btn.classList.add('highlighted-question');
+            }
+        });
+    }
+});
+
+function showVideo(videoUrl) {
+    const finalPath = getVideoPath(videoUrl);
+    console.log('Ruta final del video:', finalPath);
+    // ... el resto igual ...
+    videoFrame.src = finalPath;
+    // ...
+}

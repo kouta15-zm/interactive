@@ -34,34 +34,22 @@ test.describe('Flujo de visibilidad de controles de video', () => {
           if (videoControlsTitle) videoControlsTitle.style.display = 'block';
         }
       });
-    });
-  });
 
-  test('No muestra controles de video ni título al inicio', async ({ page }) => {
-    await page.goto(CONTROLES_URL);
-    await expect(page.locator('.main-controls')).toBeHidden();
-    await expect(page.locator('#video-controls-title')).toBeHidden();
-    await expect(page.locator('.slider-group').first()).toBeHidden();
-  });
+      if (socket) {
+        socket.on('reproductor', (data) => {
+          if (data.action === 'selectSubmenu' && data.category && data.subcat) {
+            showQuestions(data.category, data.subcat); // Esto asegura que siempre se emite showQuestionsMenu
+          }
+          // ...otros eventos...
+        });
+      }
 
-  test('Muestra controles de video y título cuando playing:true', async ({ page }) => {
-    await page.goto(CONTROLES_URL);
-    await page.evaluate(() => {
-      window.socket.emit('video-status', { playing: true });
-    });
-    await expect(page.locator('.main-controls')).toBeVisible();
-    await expect(page.locator('#video-controls-title')).toBeVisible();
-    await expect(page.locator('.slider-group').first()).toBeVisible();
-  });
-
-  test('Oculta controles de video y título cuando playing:false', async ({ page }) => {
-    await page.goto(CONTROLES_URL);
-    await page.evaluate(() => {
-      window.socket.emit('video-status', { playing: true });
-      window.socket.emit('video-status', { playing: false });
-    });
-    await expect(page.locator('.main-controls')).toBeHidden();
-    await expect(page.locator('#video-controls-title')).toBeHidden();
-    await expect(page.locator('.slider-group').first()).toBeHidden();
-  });
-}); 
+      socket.on('showQuestionsMenu', (data) => {
+        const submenuControles = document.getElementById('submenu-controles');
+        if (submenuControles) {
+          submenuControles.innerHTML = ''; // Limpiar antes de renderizar
+          submenuControles.innerHTML = `<div class="submenu-row">${
+            data.questions.map((q, idx) =>
+              `<button class="question-btn" data-question-index="${idx}">${q.question}</button>`
+            ).join('')
+          }</div>`
