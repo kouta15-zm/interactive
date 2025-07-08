@@ -180,16 +180,24 @@ input[type="range"] {
 
 .submenu-controles {
   width: 100%;
+  max-width: 300px
+  min-height: 200px;
+  margin: 18px auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 18px 0 18px 0;
+  justify-content: flex-start;
+  background: none;
+  padding: 0;
 }
 .submenu-row {
+  width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   gap: 28px;
   justify-content: center;
+  align-items: center;
+  margin: 0;
 }
 .submenu-btn {
   width: 64px;
