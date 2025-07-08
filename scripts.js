@@ -4,46 +4,14 @@ const questionsDiv = document.getElementById('questions');
 // Variable global para resaltar la pregunta seleccionada
 let lastHighlightedQuestion = null;
 
-function showQuestions(category, index) {
-    // Ocultar el contenedor de imágenes
-    document.querySelector('.container-fluid').style.display = 'none';
-    
-    // Mostrar el contenedor de preguntas
-    questionsDiv.style.display = 'block';
-    
-    // Obtener las preguntas de la categoría seleccionada
-    const selectedQuestions = questionsData[category] || [];
-    
-    // Crear la lista de preguntas con eventos para reproducir videos y numeración
-    const questionsList = selectedQuestions.map((q, idx) => 
-        `<li><button class="question-btn" data-video="${q.video}" data-idx="${idx}"><span class='question-number'>${idx+1}</span> ${q.question}</button></li>`
-    ).join('');
-
-    // Mostrar las preguntas en el contenedor
-    questionsDiv.innerHTML = `
-        <h2>Preguntas sobre ${category}</h2>
-        <ul>${questionsList}</ul>
-        <button class="back-button" onclick="goBackToMenu()">Volver al Menú Principal</button>
-    `;
-
-    questionsDiv.addEventListener('click', function(e) {
-        if (e.target.classList.contains('question-btn')) {
-            showVideo(e.target.dataset.video);
-            highlightQuestionButton(e.target);
-        }
-    });
-
-    // Emitir estado playing:false a controles (en submenú)
+function showQuestions(category, subcat) {
+    currentCategory = category;
+    currentSubcategory = subcat;
+    categoryMenu.style.display = 'none';
+    questionsSection.style.display = 'block';
+    backToMenuBtn.style.display = 'block';
+    renderQuestions(category, subcat);
     if (socket) socket.emit('video-status', { playing: false });
-
-    // Si se pasa un índice, simular el click en la pregunta correspondiente y resaltar
-    if (typeof index === 'number' && selectedQuestions[index]) {
-        const btns = questionsDiv.querySelectorAll('.question-btn');
-        if (btns[index]) {
-            highlightQuestionButton(btns[index]);
-            showVideo(selectedQuestions[index].video);
-        }
-    }
 }
 
 function goBackToMenu() {

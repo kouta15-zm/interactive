@@ -47,7 +47,10 @@ function showCategoryMenuControles() {
     const categoryMenuControles = document.getElementById('category-menu-controles');
     const submenuControles = document.getElementById('submenu-controles');
     if (categoryMenuControles) categoryMenuControles.style.display = 'block';
-    if (submenuControles) submenuControles.style.display = 'none';
+    if (submenuControles) {
+        submenuControles.style.display = 'none';
+        submenuControles.innerHTML = '';
+    }
     // Emitir estado para sincronizar con el reproductor
     socket.emit('control', { action: 'backToMenu' });
     socket.emit('video-status', { playing: false });
