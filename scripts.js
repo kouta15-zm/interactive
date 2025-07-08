@@ -11,7 +11,20 @@ function showQuestions(category, subcat) {
     questionsSection.style.display = 'block';
     backToMenuBtn.style.display = 'block';
     renderQuestions(category, subcat);
-    if (socket) socket.emit('video-status', { playing: false });
+    if (socket) {
+        socket.emit('video-status', { playing: false });
+        // Emitir evento para que controles muestren el menú de preguntas
+        const preguntas = (questionsData[category] && questionsData[category][subcat]) || [];
+        socket.emit('showQuestionsMenu', {
+            category,
+            subcat,
+            questions: preguntas.map((q, idx) => ({
+                index: idx,
+                question: q.question,
+                video: q.video
+            }))
+        });
+    }
 }
 
 function goBackToMenu() {
@@ -358,11 +371,29 @@ if (socket) {
       showSubcategories(data.category);
     }
     if (data.action === 'selectSubmenu' && data.category && (data.subcat || typeof data.index === 'number')) {
+      // Refuerzo: siempre llamar a showQuestions para sincronizar preguntas
       if (data.subcat) {
         showQuestions(data.category, data.subcat);
       } else {
         showQuestions(data.category, data.index);
       }
+    }
+  });
+  // Nuevo: escuchar solicitud forzada de menú de preguntas
+  socket.on('control', (data) => {
+    if (data.action === 'requestQuestionsMenu' && data.category && data.subcat) {
+      showQuestions(data.category, data.subcat);
+    }
+    if (data.action === 'selectQuestion' && data.video) {
+      showVideo(data.video);
+      // Opcional: resaltar la pregunta seleccionada si está visible
+      const questionBtns = document.querySelectorAll('.question-btn');
+      questionBtns.forEach((btn, idx) => {
+        btn.classList.remove('highlighted-question');
+        if (btn.dataset.video === data.video) {
+          btn.classList.add('highlighted-question');
+        }
+      });
     }
   });
 }

@@ -23,6 +23,11 @@ io.on('connection', (socket) => {
   socket.on('video-status', (data) => {
     socket.broadcast.emit('video-status', data);
   });
+
+  // Reenviar el menú de preguntas a todos los clientes (controles)
+  socket.on('showQuestionsMenu', (data) => {
+    socket.broadcast.emit('showQuestionsMenu', data);
+  });
 });
 
 const PORT = 3000;

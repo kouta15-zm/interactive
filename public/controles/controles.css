@@ -121,7 +121,7 @@ input[type="range"] {
 
 .category-menu-controles {
   width: 100%;
-  max-width: 420px;
+  max-width: 480px;
   margin: 0 auto 18px auto;
   display: flex;
   flex-direction: row;
@@ -132,18 +132,20 @@ input[type="range"] {
   display: flex;
   flex-direction: row;
   width: 100%;
-  gap: 12px;
+  gap: 16px;
+  justify-content: center;
 }
 .imagebox-controles {
+  margin: 0 6px;
+  width: 140px;
+  min-width: 0;
+  height: 140px;
   background: #23272b;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.12);
   padding: 0;
   position: relative;
   text-align: center;
-  width: 110px;
-  min-width: 0;
-  margin: 0 4px;
   transition: box-shadow 0.3s, transform 0.3s;
   border: none;
   outline: none;
@@ -157,8 +159,8 @@ input[type="range"] {
   transform: scale(1.04);
 }
 .imagebox-controles img {
-  width: 100px;
-  height: 70px;
+  width: 120px;
+  height: 90px;
   object-fit: cover;
   border-radius: 12px 12px 0 0;
   margin-bottom: 0;
