@@ -128,6 +128,7 @@ function goBackToMenu() {
     const videoFrame = document.getElementById('video-frame');
     if (videoFrame) {
         videoFrame.pause();
+        videoFrame.currentTime = 0;
         videoFrame.src = '';
         videoFrame.style.display = 'none';
     }
@@ -246,5 +247,13 @@ function showVideo(videoUrl) {
     console.log('Ruta final del video:', finalPath);
     // ... el resto igual ...
     videoFrame.src = finalPath;
+    videoFrame.onended = () => {
+        if (audioFadeInInterval) { clearInterval(audioFadeInInterval); audioFadeInInterval = null; }
+        if (audioFadeOutInterval) { clearInterval(audioFadeOutInterval); audioFadeOutInterval = null; }
+        // Solo ocultar si terminó naturalmente, no por stop
+        if (!videoFrame.paused && videoFrame.currentTime === videoFrame.duration) {
+            hideVideoWithFade(true);
+        }
+    };
     // ...
 }

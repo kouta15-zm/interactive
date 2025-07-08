@@ -76,6 +76,7 @@ function getVideoPath(relativePath) {
 }
 
 function showVideo(videoUrl) {
+    console.log('showVideo llamado con:', videoUrl);
     if (!controlsOpened && window.electronAPI && window.electronAPI.openControlsWindow) {
         window.electronAPI.openControlsWindow();
         controlsOpened = true;
@@ -349,8 +350,11 @@ if (socket) {
       videoFrame.pause();
     }
     if (data.action === 'stop') {
+      // Solo detener y limpiar el video, NO cambiar la UI ni volver al menú
       videoFrame.pause();
       videoFrame.currentTime = 0;
+      videoFrame.src = '';
+      // NO ocultar el contenedor ni mostrar el menú
     }
     if (data.action === 'next') {
       videoFrame.src = 'VIDEOS/betel/betel historia -1.mp4';
@@ -378,13 +382,8 @@ if (socket) {
         showQuestions(data.category, data.index);
       }
     }
-  });
-  // Nuevo: escuchar solicitud forzada de menú de preguntas
-  socket.on('control', (data) => {
-    if (data.action === 'requestQuestionsMenu' && data.category && data.subcat) {
-      showQuestions(data.category, data.subcat);
-    }
     if (data.action === 'selectQuestion' && data.video) {
+      console.log('Recibido selectQuestion por socket:', data.video);
       showVideo(data.video);
       // Opcional: resaltar la pregunta seleccionada si está visible
       const questionBtns = document.querySelectorAll('.question-btn');
@@ -394,6 +393,12 @@ if (socket) {
           btn.classList.add('highlighted-question');
         }
       });
+    }
+  });
+  // Nuevo: escuchar solicitud forzada de menú de preguntas
+  socket.on('control', (data) => {
+    if (data.action === 'requestQuestionsMenu' && data.category && data.subcat) {
+      showQuestions(data.category, data.subcat);
     }
   });
 }
