@@ -22,13 +22,22 @@ function formatTime(seconds) {
 }
 // --- FIN NUEVO ---
 
-document.getElementById('playBtn').onclick = () => {
-    socket.emit('control', { action: 'play' });
-};
+// Estado de reproducción local para alternar play/pause
+let isPlaying = false;
 
-document.getElementById('pauseBtn').onclick = () => {
-    socket.emit('control', { action: 'pause' });
-};
+const playPauseBtn = document.getElementById('playPauseBtn');
+if (playPauseBtn) {
+    playPauseBtn.onclick = () => {
+        if (isPlaying) {
+            socket.emit('control', { action: 'pause' });
+            playPauseBtn.textContent = '▶️';
+        } else {
+            socket.emit('control', { action: 'play' });
+            playPauseBtn.textContent = '⏸️';
+        }
+        isPlaying = !isPlaying;
+    };
+}
 
 document.getElementById('stopBtn').onclick = () => {
     socket.emit('control', { action: 'stop' });
@@ -55,10 +64,6 @@ function showCategoryMenuControles() {
     socket.emit('control', { action: 'backToMenu' });
     socket.emit('video-status', { playing: false });
 }
-
-// Modificar el homeBtn para usar la función
-const homeBtn = document.getElementById('homeBtn');
-homeBtn.onclick = showCategoryMenuControles;
 
 // Manejar clic en las cajas del menú principal de controles
 const categoryMenuControles = document.getElementById('category-menu-controles');
@@ -143,6 +148,7 @@ function goBackToMenu() {
     }
 }
 
+// Sincronizar el estado del botón con el estado real del video
 socket.on('video-status', (data) => {
     const videoControlsTitle = document.getElementById('video-controls-title');
     const submenuControles = document.getElementById('submenu-controles');
@@ -154,6 +160,9 @@ socket.on('video-status', (data) => {
         if (submenuControles && submenuControles.dataset.forceHide !== 'true') {
             submenuControles.style.display = 'block';
         }
+        // Actualizar botón a play
+        if (playPauseBtn) playPauseBtn.textContent = '▶️';
+        isPlaying = false;
     } else if (data.playing === true) {
         document.querySelector('.main-controls').style.display = 'flex';
         document.querySelectorAll('.slider-group').forEach(el => el.style.display = 'flex');
@@ -163,6 +172,9 @@ socket.on('video-status', (data) => {
             submenuControles.style.display = 'none';
             submenuControles.dataset.forceHide = 'true';
         }
+        // Actualizar botón a pause
+        if (playPauseBtn) playPauseBtn.textContent = '⏸️';
+        isPlaying = true;
     }
 });
 
@@ -197,9 +209,13 @@ socket.on('showQuestionsMenu', (data) => {
         submenuControles.innerHTML = '';
         submenuControles.innerHTML = `<div class="submenu-row">${
             data.questions.map((q, idx) =>
-                `<button class="question-btn" data-question-index="${idx}">${q.question}</button>`
+                `<button class="question-btn" data-question-index="${idx}">${idx + 1}</button>`
             ).join('')
-        }</div>`;
+        }</div>
+        <div style='display:flex; justify-content:center; gap:16px; margin-top:18px;'>
+            <button id='back-to-submenu-controles' class='control-btn' style='font-size:1.1em;padding:10px 28px;border-radius:12px;background:#235390;color:#fff;'>⬅️ Volver</button>
+            <button id='homeBtnPreguntas' class='control-btn' style='font-size:1.1em;padding:10px 28px;border-radius:12px;background:#444;color:#fff;'>🏠 Menú principal</button>
+        </div>`;
         submenuControles.style.display = 'block';
         // Asignar eventos a los botones
         submenuControles.querySelectorAll('.question-btn').forEach(qbtn => {
@@ -224,6 +240,42 @@ socket.on('showQuestionsMenu', (data) => {
                 if (videoControlsTitle) videoControlsTitle.style.display = 'block';
             };
         });
+        // Evento para el botón volver
+        const backBtn = submenuControles.querySelector('#back-to-submenu-controles');
+        if (backBtn) {
+            backBtn.onclick = () => {
+                // Volver al submenú de subcategorías (no al menú principal)
+                if (typeof currentCategory !== 'undefined' && currentCategory) {
+                    fetch('../../data.json')
+                        .then(res => res.json())
+                        .then(data => {
+                            const subcategories = Object.keys(data[currentCategory] || {});
+                            submenuControles.innerHTML = `<div class='submenu-row'>${subcategories.map((sub, idx) => `<button class='submenu-btn' data-index='${idx}'>${idx+1}</button>`).join('')}</div>`;
+                            submenuControles.style.display = 'block';
+                            // Asignar eventos a los botones del submenú
+                            submenuControles.querySelectorAll('.submenu-btn').forEach(btn => {
+                                btn.onclick = () => {
+                                    const index = parseInt(btn.getAttribute('data-index'), 10);
+                                    const subcat = subcategories[index];
+                                    // Emitir selección de subcategoría
+                                    if (socket && socket.connected) {
+                                        socket.emit('control', { action: 'selectSubmenu', category: currentCategory, subcat, index });
+                                    }
+                                };
+                            });
+                            // Emitir por socket para sincronizar pantalla 1
+                            if (socket && socket.connected) {
+                                socket.emit('control', { action: 'selectCategory', category: currentCategory });
+                            }
+                        });
+                }
+            };
+        }
+        // Evento para el botón volver al menú principal
+        const homeBtnPreguntas = submenuControles.querySelector('#homeBtnPreguntas');
+        if (homeBtnPreguntas) {
+            homeBtnPreguntas.onclick = showCategoryMenuControles;
+        }
     }
 });
 
