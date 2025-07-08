@@ -173,3 +173,19 @@ window.addEventListener('DOMContentLoaded', () => {
     const videoControlsTitle = document.getElementById('video-controls-title');
     if (videoControlsTitle) videoControlsTitle.style.display = 'none';
 });
+
+// --- Controles de video (unificado de reproductor-controles.js) ---
+function showReproductorControles() {
+    document.querySelector('.main-controls').style.display = 'flex';
+    document.querySelectorAll('.slider-group').forEach(el => el.style.display = 'flex');
+    const videoControlsTitle = document.getElementById('video-controls-title');
+    if (videoControlsTitle) videoControlsTitle.style.display = 'block';
+    // Si hay lógica de sincronización adicional, agregar aquí
+}
+
+function hideReproductorControles() {
+    document.querySelector('.main-controls').style.display = 'none';
+    document.querySelectorAll('.slider-group').forEach(el => el.style.display = 'none');
+    const videoControlsTitle = document.getElementById('video-controls-title');
+    if (videoControlsTitle) videoControlsTitle.style.display = 'none';
+}

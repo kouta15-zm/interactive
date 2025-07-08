@@ -1,4 +1,5 @@
-// Lógica de sincronización por socket
+// Funciones de sincronización por socket para controles
+
 export function syncToMenuPrincipal() {
     if (window.socket) {
         window.socket.emit('control', { action: 'backToMenu' });

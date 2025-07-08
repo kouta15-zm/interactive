@@ -130,4 +130,86 @@ function loadConfig() {
     return JSON.parse(fs.readFileSync(configPath));
   }
   return null;
+}
+
+// --- Menú principal ---
+function showMenuPrincipal() {
+    const categoryMenu = document.getElementById('category-menu');
+    const questionsSection = document.getElementById('questions');
+    if (categoryMenu) categoryMenu.style.display = 'flex';
+    if (questionsSection) questionsSection.style.display = 'none';
+}
+
+function setupMenuPrincipalHandlers(onCategorySelected) {
+    const categoryMenu = document.getElementById('category-menu');
+    if (categoryMenu) {
+        categoryMenu.addEventListener('click', (e) => {
+            const box = e.target.closest('.imagebox');
+            if (box) {
+                const category = box.querySelector('a').getAttribute('onclick').match(/showSubcategories\('(.+?)'\)/)[1];
+                onCategorySelected(category);
+            }
+        });
+    }
+}
+
+// --- Submenú ---
+function showSubmenu(subcats, onSubcatSelected) {
+    const questionsContent = document.getElementById('questions-content');
+    if (!questionsContent) return;
+    questionsContent.innerHTML = `
+        <ul class="list-unstyled">
+            ${subcats.map(sub => `<li><button class="subcategory-btn" data-subcat="${sub}" tabindex="0">${sub.charAt(0).toUpperCase() + sub.slice(1)}</button></li>`).join('')}
+        </ul>
+    `;
+    questionsContent.style.display = 'block';
+    questionsContent.addEventListener('click', function handler(e) {
+        if (e.target.classList.contains('subcategory-btn')) {
+            onSubcatSelected(e.target.dataset.subcat);
+            questionsContent.removeEventListener('click', handler);
+        }
+    });
+}
+function hideSubmenu() {
+    const questionsContent = document.getElementById('questions-content');
+    if (questionsContent) questionsContent.style.display = 'none';
+}
+
+// --- Preguntas ---
+function showPreguntas(preguntas, onPreguntaSelected) {
+    const questionsContent = document.getElementById('questions-content');
+    if (!questionsContent) return;
+    questionsContent.innerHTML = preguntas.map((q, i) =>
+        `<li><button class="question-btn" data-video="${q.video}" tabindex="0">${q.question}</button></li>`
+    ).join('');
+    questionsContent.style.display = 'block';
+    questionsContent.addEventListener('click', function handler(e) {
+        if (e.target.classList.contains('question-btn')) {
+            onPreguntaSelected(e.target.dataset.video, i);
+            questionsContent.removeEventListener('click', handler);
+        }
+    });
+}
+function hidePreguntas() {
+    const questionsContent = document.getElementById('questions-content');
+    if (questionsContent) questionsContent.style.display = 'none';
+}
+
+// --- Reproductor de video ---
+function showVideo(videoUrl) {
+    const videoContainer = document.getElementById('video-container');
+    const videoFrame = document.getElementById('video-frame');
+    if (!videoContainer || !videoFrame) return;
+    videoContainer.style.display = 'block';
+    videoFrame.src = videoUrl;
+    videoFrame.play();
+}
+function hideVideo() {
+    const videoContainer = document.getElementById('video-container');
+    const videoFrame = document.getElementById('video-frame');
+    if (videoContainer) videoContainer.style.display = 'none';
+    if (videoFrame) {
+        videoFrame.pause();
+        videoFrame.src = '';
+    }
 } 
