@@ -9,9 +9,9 @@
 </head>
 <body>
     <div class="controls-container" id="controls-container">
-        <div class="home-row" id="home-row">
-            <button id="homeBtn" class="home-btn" title="Volver al menú principal">🏠</button>
-           
+        <div class="home-row" id="home-row" style="display:flex; gap:48px; align-items:center; justify-content:center;">
+            <button id="backBtn" class="control-btn" style="display:none; font-size:2em; height:72px; width:72px; border-radius:16px; background:#235390; color:#fff; display:flex; align-items:center; justify-content:center; box-sizing:border-box;" title="Volver">⬅️</button>
+            <button id="homeBtn" class="home-btn" style="font-size:2em; height:72px; width:72px; border-radius:16px; background:#444; color:#fff; display:flex; align-items:center; justify-content:center; box-sizing:border-box;" title="Volver al menú principal">🏠</button>
         </div>
         <div id="category-menu-controles" class="category-menu-controles">
             <div class="row">
@@ -42,13 +42,10 @@
                 <button class="submenu-btn" data-index="2">3</button>
             </div>
         </div>
-        <h1 id="video-controls-title">Controles de Video</h1>
+        <h2 id="video-controls-title">Controles de Video</h2>
         
-        <div class="main-controls">
+        <div class="main-controls" style="display:flex; align-items:center; gap:16px;">
             <button id="playPauseBtn" class="control-btn">▶️</button>
-        </div>
-        <div class="slider-group">
-            <label for="progressControl">Progreso</label>
             <input type="range" id="progressControl" min="0" max="100" value="0">
             <span id="timeIndicator">00:00 / 00:00</span>
         </div>

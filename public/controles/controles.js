@@ -43,7 +43,16 @@ document.getElementById('volumeControl').oninput = (e) => {
     socket.emit('control', { action: 'volume', value: e.target.value });
 };
 
-// Mostrar menú principal de categorías solo cuando corresponde
+// Función para mostrar/ocultar y asignar acción al botón Volver SOLO en menú de preguntas
+function showBackBtnInQuestions(show, onClick) {
+    const backBtn = document.getElementById('backBtn');
+    if (backBtn) {
+        backBtn.style.display = show ? 'inline-block' : 'none';
+        backBtn.onclick = show && typeof onClick === 'function' ? onClick : null;
+    }
+}
+
+// En menú principal y submenú de subcategorías: ocultar botón Volver
 function showCategoryMenuControles() {
     const categoryMenuControles = document.getElementById('category-menu-controles');
     const submenuControles = document.getElementById('submenu-controles');
@@ -53,8 +62,9 @@ function showCategoryMenuControles() {
         submenuControles.style.display = 'none';
         submenuControles.innerHTML = '';
     }
-    // Ocultar el botón homeBtn en el menú principal
+    // Ocultar la barra de botones arriba en el menú principal
     if (homeRow) homeRow.style.display = 'none';
+    showBackBtnInQuestions(false);
     // Emitir estado para sincronizar con el reproductor
     socket.emit('control', { action: 'backToMenu' });
     socket.emit('video-status', { playing: false });
@@ -71,23 +81,20 @@ if (categoryMenuControles) {
     if (box) {
       const category = box.getAttribute('data-category');
       currentCategory = category;
-      // Cargar subcategorías dinámicamente desde data.json
       fetch('../../data.json')
         .then(res => res.json())
         .then(data => {
           subcategories = Object.keys(data[category] || {});
-          // Actualizar los botones del submenú con los números
           if (submenuControles) {
             submenuControles.innerHTML = `<div class="submenu-row">${subcategories.map((sub, idx) => `<button class="submenu-btn" data-index="${idx}">${idx+1}</button>`).join('')}</div>`;
             submenuControles.style.display = 'block';
-            // Ocultar el botón homeBtn en el submenú de subcategorías
             const homeRow = document.getElementById('home-row');
-            if (homeRow) homeRow.style.display = 'none';
+            if (homeRow) homeRow.style.display = 'flex';
+            // Ocultar botón Volver en submenú de subcategorías
+            showBackBtnInQuestions(false);
           }
         });
-      // Ocultar menú de cajas
       categoryMenuControles.style.display = 'none';
-      // Emitir selección de categoría
       socket.emit('control', { action: 'selectCategory', category });
     }
   });
@@ -209,9 +216,7 @@ socket.on('showQuestionsMenu', (data) => {
     if (submenuControles) {
         submenuControles.innerHTML = '';
         submenuControles.innerHTML = `
-            <div style='display:flex; justify-content:center; gap:16px; margin-bottom:18px;'>
-                <button id='back-to-submenu-controles' class='control-btn' style='font-size:1.1em;padding:10px 28px;border-radius:12px;background:#235390;color:#fff;'>⬅️ Volver</button>
-            </div>
+            <div style='height:32px;'></div>
             <div class="submenu-row" style="justify-content:center; margin-top:24px;">${
                 data.questions.map((q, idx) =>
                     `<button class="question-btn" data-question-index="${idx}">${idx + 1}</button>`
@@ -220,7 +225,35 @@ socket.on('showQuestionsMenu', (data) => {
         `;
         submenuControles.style.display = 'block';
         showHomeBtn();
-        // Asignar eventos a los botones
+        // Mostrar botón Volver SOLO en menú de preguntas
+        showBackBtnInQuestions(true, () => {
+            if (typeof currentCategory !== 'undefined' && currentCategory) {
+                fetch('../../data.json')
+                    .then(res => res.json())
+                    .then(data => {
+                        const subcategories = Object.keys(data[currentCategory] || {});
+                        submenuControles.innerHTML = `<div class='submenu-row'>${subcategories.map((sub, idx) => `<button class='submenu-btn' data-index='${idx}'>${idx+1}</button>`).join('')}</div>`;
+                        submenuControles.style.display = 'block';
+                        const homeRow = document.getElementById('home-row');
+                        if (homeRow) homeRow.style.display = 'flex';
+                        // Ocultar botón Volver en submenú de subcategorías
+                        showBackBtnInQuestions(false);
+                        submenuControles.querySelectorAll('.submenu-btn').forEach(btn => {
+                            btn.onclick = () => {
+                                const index = parseInt(btn.getAttribute('data-index'), 10);
+                                const subcat = subcategories[index];
+                                if (socket && socket.connected) {
+                                    socket.emit('control', { action: 'selectSubmenu', category: currentCategory, subcat, index });
+                                }
+                            };
+                        });
+                        if (socket && socket.connected) {
+                            socket.emit('control', { action: 'selectCategory', category: currentCategory });
+                        }
+                    });
+            }
+        });
+        // Asignar eventos a los botones de preguntas
         submenuControles.querySelectorAll('.question-btn').forEach(qbtn => {
             qbtn.onclick = () => {
                 const qIdx = parseInt(qbtn.getAttribute('data-question-index'), 10);
@@ -235,49 +268,15 @@ socket.on('showQuestionsMenu', (data) => {
                         video: question.video
                     });
                 }
-                // Ocultar preguntas y mostrar controles de video
                 submenuControles.style.display = 'none';
                 document.querySelector('.main-controls').style.display = 'flex';
                 document.querySelectorAll('.slider-group').forEach(el => el.style.display = 'flex');
                 const videoControlsTitle = document.getElementById('video-controls-title');
                 if (videoControlsTitle) videoControlsTitle.style.display = 'block';
+                // Ocultar botón Volver durante la reproducción de video
+                showBackBtnInQuestions(false);
             };
         });
-        // Evento para el botón volver
-        const backBtn = submenuControles.querySelector('#back-to-submenu-controles');
-        if (backBtn) {
-            backBtn.onclick = () => {
-                // Volver al submenú de subcategorías (no al menú principal)
-                if (typeof currentCategory !== 'undefined' && currentCategory) {
-                    fetch('../../data.json')
-                        .then(res => res.json())
-                        .then(data => {
-                            const subcategories = Object.keys(data[currentCategory] || {});
-                            submenuControles.innerHTML = `<div class='submenu-row'>${subcategories.map((sub, idx) => `<button class='submenu-btn' data-index='${idx}'>${idx+1}</button>`).join('')}</div>`;
-                            submenuControles.style.display = 'block';
-                            // Ocultar el botón homeBtn en el submenú de subcategorías
-                            const homeRow = document.getElementById('home-row');
-                            if (homeRow) homeRow.style.display = 'none';
-                            // Asignar eventos a los botones del submenú
-                            submenuControles.querySelectorAll('.submenu-btn').forEach(btn => {
-                                btn.onclick = () => {
-                                    const index = parseInt(btn.getAttribute('data-index'), 10);
-                                    const subcat = subcategories[index];
-                                    // Emitir selección de subcategoría
-                                    if (socket && socket.connected) {
-                                        socket.emit('control', { action: 'selectSubmenu', category: currentCategory, subcat, index });
-                                    }
-                                };
-                            });
-                            // Emitir por socket para sincronizar pantalla 1
-                            if (socket && socket.connected) {
-                                socket.emit('control', { action: 'selectCategory', category: currentCategory });
-                            }
-                        });
-                }
-            };
-        }
-        // Ya no hay botón homeBtnPreguntas
     }
 });
 
