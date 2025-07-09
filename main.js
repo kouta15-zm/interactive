@@ -13,11 +13,14 @@ function createControlsWindow() {
   const primaryDisplay = screen.getPrimaryDisplay();
   const secondaryDisplay = displays.length > 1 ? displays.find(d => d.id !== primaryDisplay.id) : primaryDisplay;
 
+  // Usar el tamaño completo del área de trabajo de la pantalla secundaria
+  const { x, y, width, height } = secondaryDisplay.workArea;
+
   controlsWindow = new BrowserWindow({
-    x: secondaryDisplay.bounds.x + 50,
-    y: secondaryDisplay.bounds.y + 50,
-    width: 600,
-    height: 500,
+    x: x,
+    y: y,
+    width: width,
+    height: height,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true
@@ -30,6 +33,7 @@ function createControlsWindow() {
     }
     controlsWindow = null;
   });
+  controlsWindow.maximize();
 }
 
 function createReproductorWindow() {

@@ -179,16 +179,8 @@ input[type="range"] {
 }
 
 .submenu-controles {
-  width: 100%;
-  max-width: 300px
-  min-height: 200px;
-  margin: 18px auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  background: none;
-  padding: 0;
+  max-width: 700px;
+  min-height: 168px;
 }
 .submenu-row {
   width: 100%;
@@ -200,8 +192,9 @@ input[type="range"] {
   margin: 0;
 }
 .submenu-btn {
-  width: 64px;
-  height: 64px;
+  width: 143px;
+  height: 143px;
+  font-size: 4.93em;
   border-radius: 50%;
   background: #23272b;
   color: #b0c4de;
@@ -248,4 +241,67 @@ input[type="range"] {
   background: linear-gradient(90deg, #ffb347 0%, #ffcc33 100%);
   color: #222;
   box-shadow: 0 4px 16px rgba(255,204,51,0.15);
+} 
+
+/* Agrandar todo un 60% */
+.control-btn {
+  width: 90px;
+  height: 90px;
+  font-size: 4em;
+}
+
+.home-btn {
+  width: 120px;
+  height: 120px;
+  font-size: 4.48em;
+}
+
+.submenu-btn, .question-btn {
+  width: 102px;
+  height: 102px;
+  font-size: 3.52em;
+}
+
+.category-menu-controles .imagebox-controles {
+  width: 320px;
+  height: 240px;
+  font-size: 4.8em;
+  padding: 80px;
+}
+
+.category-menu-controles .imagebox-desc {
+  font-size: 0.74em;
+}
+
+.category-menu-controles .imagebox-controles img {
+  width: 260px;
+  height: 200px;
+}
+
+input[type="range"] {
+  width: 288px;
+  height: 9.6px;
+}
+
+#progressControl {
+  width: 288px;
+}
+
+#volumeControl {
+  width: 128px;
+}
+
+#timeIndicator {
+  font-size: 1.76em;
+  min-width: 128px;
+}
+
+label {
+  min-width: 112px;
+  font-size: 1.92em;
+} 
+
+#questions-content, .questions-content {
+  min-height: 120px;
+  margin: 10px auto !important;
 } 
